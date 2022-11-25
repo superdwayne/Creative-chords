@@ -1,205 +1,216 @@
-import React, { useRef, useState, Suspense} from "react";
-import { Canvas, useFrame, useThree, useLoader, extend } from "@react-three/fiber";
-import { Scroll, ScrollControls, useScroll, Sky, Stars,Environment } from "@react-three/drei";
-import {config, useSpring, animated} from "@react-spring/three";
-import './App.css';
-// import Text from './Text';
-import { Scene } from './components/Scene'
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
-import { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
-import { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
-let effectSobel;
+import React, { useRef, useState, Suspense } from "react";
+import * as THREE from "three";
+import Member from './components/Section/Member'
+import { Nav, DarkMode } from './components/Top/Nav'
+import {
+  Canvas,
+  useFrame,
+  useThree,
+  useLoader,
+  extend,
+} from "@react-three/fiber";
 
+import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 
-// Sobel operator
-// effectSobel = new ShaderPass( SobelOperatorShader );
-// effectSobel.uniforms[ 'resolution' ].value.x = window.innerWidth * window.devicePixelRatio;
-// effectSobel.uniforms[ 'resolution' ].value.y = window.innerHeight * window.devicePixelRatio;
-// composer.addPass( effectSobel );
-
-  // useFrame(()  {=>
-  //   group.current.children[0].material.color = "pink";
-  //   // group.current.children[1];
-  // });
+import {
+  Scroll,
+  ScrollControls,
+  Stars,
+  Lathe,
+  OrbitControls,
+  Effects,
+  Image
+} from "@react-three/drei";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "./App.css";
+extend({GlitchPass, BloomPass });
 
 function Box(props) {
-  const { width, height } = useThree((state) => state.viewport);
-  const ref = useRef();
-  useFrame(()=>(ref.current.rotation.x += 0.075))
-
-const [isClicked, setClicked ] = useState(false);
-const [isHovered, setHovered ] = useState(false);
-
-const {scale} = useSpring({
-  scale:isClicked ? 2 : 1,
-  config: config.wobbly
-});
+  // This reference will give us direct access to the mesh
+  const mesh = useRef()
 
   return (
-    <animated.mesh {...props} ref={ref} 
-    onClick={()=> setClicked(!isClicked)}
-    onPointerOver={()=> setHovered(true)}
-    onPointerOut={()=> setHovered(false)}
-    scale={scale}>
-      <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
-      <meshStandardMaterial attach="material" color={isHovered ? "hotpink" : "black"} />
-      <ambientLight intensity={0.5} />
-      <hemisphereLight intensity={0.4} />
-    </animated.mesh>
-  );
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={[0.5, 0.1, 0,1]}
+      >
+      <boxGeometry args={[10, 0.5, 0]} />
+      <meshStandardMaterial color="orange"   />
+    </mesh>
+  )
 }
 
-  // const { x } = useSpring({ x: 0, from: { x: 1 } })
-  // return <a.mesh position-x={x} />
-  
-  // const { x } = useSpring({ x: 0, from: { x: 1 } })
-  // return <a.mesh position={x.to(x => [x, 0, 0])} />
-  
-  // const { x } = useSpring({ x: [0, 0, 0], from: { x: [1, 0, 0] } })
-  // return <a.mesh position={x} />
+function Imagemap() {
+  const ref = useRef()
+  useFrame(() => {
+    ref.current.material.zoom = 1 // 1 and higher
+    ref.current.material.grayscale = 0 // between 0 and 1
+    ref.current.material.color.set(0x7289da) // mix-in color
+  })
+  return <Image ref={ref} position={[0,-5,0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
+}
 
 
 
 
+function LatheScene() {
+  const points = React.useMemo(() => {
+    const points = [THREE.Vector2];
+    for (let i = 0; i < 10; i++) {
+      points.push(new THREE.Vector2(Math.sin(i * 0.2) * 10 + 5, (i - 5) * 2));
+    }
 
-{/* <animated.group position={y.interpolate(r => ([0, y, 0])} */}
+    return points;
+  }, []);
 
-
-
-
-// function Text3D() {
-//   const ref = useRef();
-//   const meshMat = useRef()
-
-//   const toggle= useState(false);
-//   const [isHovered, setHovered ] = useState(false);
-//   const [isClicked, setClicked ] = useState(false);
-
-
-//   // const {opacity} = useSpring({
-//   //   opacity:isHovered ? 1 : 0,
-//   //   config: config.wobbly
-//   // });
-
-
-//   // const {styles} = useSpring({
-//   //   from: { opacity: '0' },
-//   //   to: { opacity: '1' },
-//   //   config: { duration: '2000' },
-//   // });
-
-//   // Update spring with new props
-//   // api.start({ opacity: toggle ? 1 : 0 })
-//   // Stop animation
-//   // api.stop();
-// // return <animated.div style={styles}>i will fade</animated.div>
-//   // useFrame(({ clock }) => (ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z = Math.sin(clock.getElapsedTime()) * 0.3))
-//   return (
-//     <animated.group ref={ref} onPointerOver={()=> setHovered(true) }
-//     onPointerOut={()=> setHovered(false)}>
-//       <Text coordinates={[-4.75 ,3, 0]} scale={[0.5,0.5, 0.001]} text="Creative"  />
-//       <Text coordinates={[-4.75,2.5,0]} scale={[0.5,0.5, 0.001]} text="Chord"  />
-//       <meshStandardMaterial ref={meshMat} color={isHovered ? 'hotpink' : 'orange'} />
-//       {/* <meshStandardMaterial ref={meshMat} attach='material' color={isHovered ? "hotpink" : "black"} /> */}
-//     </animated.group>
-//   )
-// }
-// const AnimatedText = animated(Text3D);
-
-// function BouncyHello() {
-//   const spring = useSpring({
-//     from: { scale: [0, 0, 0] },
-//     to: { scale: [10, 10, 10] },
-//     config: {
-//       friction: 10,
-//     },
-//     delay: 1000,
-//   })
-//   return <AnimatedText {...spring}>Hello!</AnimatedText>
-// }
-
-
-// function DrawLines(props){
-//   const { width, height } = useThree((state) => state.viewport);
-//   const ref = useRef();
-
-//   useFrame(()=>(ref.current.position.x += 0.075))
-  
-//   const points = []
-//   points.push(new Vector3(-width, 10, 0))
-//   points.push(new Vector3(width, 10, 0))
-//   // points.push(new Vector3(10, 0, 0))
-
-//   const lineGeometry = new BufferGeometry().setFromPoints(points)
-  
-//   // const positions = new Float32Array(points.length * 2)
-//   return (
-//       <group  {...props} ref={ref} position={[0, -2.5, -10]}>
-//         <line geometry={lineGeometry}>
-//           <lineBasicMaterial attach="material" color={'#000'} linewidth={15} linecap={'round'} linejoin={'round'} />
-//         </line>
-//       </group>
-//   )
-// }
-
-
+  return (
+    <Lathe args={[points]} rotation={[-0.2, 0.7, 1.5]} scale={[0.9, 6, 0.9]}>
+      <meshStandardMaterial color="white" wireframe />
+    </Lathe>
+  );
+}
 
 function App() {
+  const current = new Date();
+  const date = `${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}`;
   return (
-    <Canvas>
-      {/* <DrawLines /> */}
-      <ScrollControls horizontal={false} damping={3} pages={3}>
-        <Suspense fallback={null}>
-        <Scene />
-      </Suspense>
-        {/* <Scroll><Box position={[1.3,0,0]}/><DrawLines /></Scroll> */}
-      </ScrollControls>
-      {/* <Sky distance={450000} // Camera distance (default=450000)
-  sunPosition={[0, -1, -1]} // Sun position normal (defaults to inclination and azimuth if not set)
-  inclination={0} // Sun elevation angle from 0 to 1 (default=0)
-  azimuth={0.25} // Sun rotation around the Y axis from 0 to 1 (default=0.25)
-  /> */}
+    <section className="main">
+      <header className="elements">
+        <section className="date">{date}</section>
 
-  {/* <Stars
-  radius={100} // Radius of the inner sphere (default=100)
-  depth={50} // Depth of area where stars should fit (default=50)
-  count={5000} // Amount of stars (default=5000)
-  factor={4} // Size factor (default=4)
-  saturation={0} // Saturation 0-1 (default=0)
-  fade // Faded dots (default=false)
-/> */}
-      <Environment preset="forest" /> 
-      {/* sunset: 'venice/venice_sunset_1k.hdr',
-  dawn: 'kiara/kiara_1_dawn_1k.hdr',
-  night: 'dikhololo/dikhololo_night_1k.hdr',
-  warehouse: 'empty-wharehouse/empty_warehouse_01_1k.hdr',
-  forest: 'forrest-slope/forest_slope_1k.hdr',
-  apartment: 'lebombo/lebombo_1k.hdr',
-  studio: 'studio-small-3/studio_small_03_1k.hdr',
-  city: 'potsdamer-platz/potsdamer_platz_1k.hdr',
-  park: 'rooitou/rooitou_park_1k.hdr',
-  lobby: 'st-fagans/st_fagans_interior_1k.hdr', */}
+        <section>
+   
+        </section>
 
-    </Canvas>
+        <section>
+          <Nav/>
+        </section>
+      </header>
+
+      <main className="container">
+        <section>
+          <h1>
+            CREATIVE <br /> CHORDS
+          </h1>
+        </section>
+        <Canvas
+          style={{
+            display: "block",
+            height: "100vh",
+            width: "100vw",
+            backgroundColor: "#000",
+          }}
+        >
+          <ScrollControls
+            pages={1.1} // Each page takes 100% of the height of the canvas
+            distance={1} // A factor that increases scroll bar travel (default: 1)
+            damping={4} // Friction, higher is faster (default: 4)
+            horizontal={false} // Can also scroll horizontally (default: false)
+            infinite={false} // Can also scroll infinitely (default: false)
+          >
+            <Scroll>
+              <ambientLight />
+              <LatheScene />
+              <Stars
+                radius={100}
+                depth={50}
+                count={5000}
+                factor={4}
+                saturation={0}
+                fade
+                speed={1}
+              />
+            </Scroll>
+            <Scroll html className="wide">
+              <h1 style={{ color: "white" }}>
+                {" "}
+                MISSION
+                <br />
+                MISSION
+                <br />
+                MISSION{" "}
+              </h1>
+              <h2 style={{ color: "white" }}>
+                {" "}
+                Innovate as a community to shape the world of web3.0 and beyond
+              </h2>
+            </Scroll>
+          </ScrollControls>
+        </Canvas>
+      </main>
+      <main className="featured">
+        <section>
+          <h1>
+            FEATURED <br /> CREATIVE
+          </h1>
+
+          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={false}>
+          
+          <div>
+            <Member bkname="DPM" 
+            imageSrc = './images/DPM.png'
+            imageSrcAlt ='DPM'
+            nameMain = 'DPM'
+            introDescription = 'Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
+            company = 'AKQA'
+             />
+           </div> 
+
+           <div>
+            <Member bkname="YANA" 
+            imageSrc = 'https://api.readyplayer.me/v1/avatars/628de9ff49453c2dc412d2a6.png?cacheControl=true&uat=2022-08-26T11:57:38.543Z'
+            imageSrcAlt ='YPM'
+            nameMain = 'YANA'
+            introDescription = 'Bla bla'
+            company = 'Farfetch'
+             />
+           </div> 
+
+
+          </Carousel>
+        </section>
+      </main>
+      <footer>
+        <Canvas
+        
+          gl={{ alpha: true }}
+          camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
+          jkhjhm
+          style={{
+            backgroundColor: "black",
+            display: "block",
+            height: "50vh",
+            width: "100vw",
+          }}
+        >
+        
+          <ambientLight />
+          <Effects multisamping={8} >
+      
+      {/* <bloomPass  /> */}
+      <glitchPass attachArray="passes" />
+    </Effects>
+          {/* <OrbitControls /> */}
+          <gridHelper
+            rotation={[0.8, 1.58, 2.26]}
+            args={[160, 150, 20, "white"]}
+            position={[1, 0, -2]}
+          />
+         <Imagemap/>
+         <gridHelper
+            rotation={[0.8, 1.58, 2.5]}
+            args={[160, 50, 20, "white"]}
+            position={[0, -20, -2]}
+          />
+        </Canvas>
+      </footer>
+    </section>
   );
 }
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>Edit <code>src/App.js</code> and save to reload.</p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
