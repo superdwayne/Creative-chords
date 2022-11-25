@@ -158,6 +158,10 @@ function App() {
             nameMain = 'DPM'
             introDescription = 'Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
             company = 'AKQA'
+            website = ''
+            instagram = ''
+            twitter = ''
+            linkedin = ''
              />
            </div> 
 
@@ -168,6 +172,10 @@ function App() {
             nameMain = 'YANA'
             introDescription = 'Bla bla'
             company = 'Farfetch'
+            website = ''
+            instagram = ''
+            twitter = ''
+            linkedin = ''
              />
            </div> 
 

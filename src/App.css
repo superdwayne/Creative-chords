@@ -68,7 +68,17 @@ small {
     top: -200px !important;
   }
 
+
+  .Social_nav > ul{
+    width: 30px !important;
+    list-style-type: none;
+    display:flex;
+  }
+
 }
+
+
+
 
 .container h2 { 
   text-align: center;
@@ -148,6 +158,35 @@ header , .elements > section {
 .hr {
    border-right: 1px dotted #f000;
 }
+
+
+.Social_nav {
+  width: 100%;
+  bottom: 0;
+  left:0;
+  padding:0;
+  position: relative;
+  justify-content: center;
+  display:flex;
+  z-index: 0;
+
+}
+
+.Social_nav > ul{
+  width: 380px !important;
+  list-style-type: none;
+  display:flex;
+  padding:0;
+}
+
+
+
+/* .Social_nav > ul > li{
+  display: inline-block;
+}
+ */
+
+
 
 html,body #root{
   width:100%;
