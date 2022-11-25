@@ -162,12 +162,12 @@ function App() {
            </div> 
 
            <div>
-            <Member bkname="YANA" 
-            imageSrc = 'https://api.readyplayer.me/v1/avatars/628de9ff49453c2dc412d2a6.png?cacheControl=true&uat=2022-08-26T11:57:38.543Z'
-            imageSrcAlt ='YPM'
-            nameMain = 'YANA'
-            introDescription = 'Bla bla'
-            company = 'Farfetch'
+            <Member bkname="Nikola" 
+            imageSrc = './images/Nikolaibibo.png'
+            imageSrcAlt ='Nikolaibibo'
+            nameMain = 'Nikolaibibo'
+            introDescription = 'innovation FTW'
+            company = 'Google'
              />
            </div> 
 
