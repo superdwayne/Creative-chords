@@ -93,7 +93,12 @@ function App() {
       </header>
 
       <main className="container">
-        <section>
+        <section 
+         style={{
+          display: "block",
+          height: "90vh",
+          backgroundColor: "#fff",
+          }}>
           <h1>
             CREATIVE <br /> CHORDS
           </h1>
@@ -149,7 +154,7 @@ function App() {
             FEATURED <br /> CREATIVE
           </h1>
 
-          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={false}>
+          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={true}>
           
           <div>
             <Member bkname="DPM" 
@@ -179,6 +184,21 @@ function App() {
              />
            </div> 
 
+           <div>
+            <Member bkname="YOSHI" 
+            imageSrc = './images/YOSHI.png'
+            imageSrcAlt ='YOSHI'
+            nameMain = 'YOSHI'
+            introDescription = 'Bla bla'
+            company = 'Ford'
+            website = ''
+            instagram = ''
+            twitter = ''
+            linkedin = ''
+             />
+           </div> 
+
+
 
           </Carousel>
         </section>
@@ -188,10 +208,10 @@ function App() {
         
           gl={{ alpha: true }}
           camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
-          jkhjhm
           style={{
             backgroundColor: "black",
             display: "block",
+            position: "relative",
             height: "50vh",
             width: "100vw",
           }}

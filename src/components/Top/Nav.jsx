@@ -6,10 +6,16 @@ import { Scroll, ScrollControls, Environment } from '@react-three/drei'
 import { Turn as Hamburger } from 'hamburger-react'
 
 
+
+
+
+
+
 const Nav = () => {
    const [isOpen, setOpen] = useState(false)
-
+   const navMenu = document.getElementById('navbarNav');
    return (
+      <>
       <Hamburger className='hamburger'
          style={{
             marginRight: '0%'
@@ -17,8 +23,27 @@ const Nav = () => {
          size={40}
          distance="sm"
          toggled={isOpen} toggle={setOpen}
-      // onToggle={toggled => setOpen(!isOpen)}
+      onToggle={toggled => {
+       
+         
+         // 
+      }}
       />
+      
+      <div id="navbarNav" className={}>
+                    <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                            <a className="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/">Posts</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/">Profile</a>
+                        </li>
+                    </ul>
+                </div>
+      </>
    )
 };
 
