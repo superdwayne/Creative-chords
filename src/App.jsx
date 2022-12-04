@@ -177,24 +177,6 @@ function App() {
             nameMain = 'YANA'
             introDescription = 'Bla bla'
             company = 'Farfetch'
-            website = ''
-            instagram = ''
-            twitter = ''
-            linkedin = ''
-             />
-           </div> 
-
-           <div>
-            <Member bkname="YOSHI" 
-            imageSrc = './images/YOSHI.png'
-            imageSrcAlt ='YOSHI'
-            nameMain = 'YOSHI'
-            introDescription = 'Bla bla'
-            company = 'Ford'
-            website = ''
-            instagram = ''
-            twitter = ''
-            linkedin = ''
              />
            </div> 
 
