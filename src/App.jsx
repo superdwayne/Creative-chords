@@ -1,7 +1,9 @@
-import React, { useRef, useState, Suspense } from "react";
+import React, { useRef, useState, Suspense, useLayoutEffect } from "react";
 import * as THREE from "three";
 import Member from './components/Section/Member'
 import { Nav, DarkMode } from './components/Top/Nav'
+import { Logo } from './components/Top/Logo'
+import { Text } from './components/Text'
 import {
   Canvas,
   useFrame,
@@ -10,38 +12,55 @@ import {
   extend,
 } from "@react-three/fiber";
 
-import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
+
+import { gsap, ScrollTrigger, Draggable, MotionPathPlugin } from "gsap/all";
+
 
 import {
   Scroll,
   ScrollControls,
   Stars,
   Lathe,
+  CameraShake, 
+  Environment,
   OrbitControls,
   Effects,
   Image
 } from "@react-three/drei";
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib';
+
+
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./App.css";
+
+
 extend({GlitchPass, BloomPass });
+RectAreaLightUniformsLib.init();
 
-function Box(props) {
-  // This reference will give us direct access to the mesh
-  const mesh = useRef()
+// gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
+
+function Light() {
+  const ref = useRef()
+  useFrame((_) => (ref.current.rotation.x = _.clock.elapsedTime))
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={[0.5, 0.1, 0,1]}
-      >
-      <boxGeometry args={[10, 0.5, 0]} />
-      <meshStandardMaterial color="orange"   />
-    </mesh>
+    <group ref={ref}>
+      <rectAreaLight width={15} height={100} position={[30, 30, -10]} intensity={5} onUpdate={(self) => self.lookAt(0, 0, 0)} />
+    </group>
   )
 }
+
+function Rig() {
+  const [vec] = useState(() => new THREE.Vector3())
+  const { camera, mouse } = useThree()
+  useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, 1, 60), 0.05))
+  return <CameraShake maxYaw={0.01} maxPitch={0.01} maxRoll={0.01} yawFrequency={0.2} pitchFrequency={0.2} rollFrequency={0.4} />
+}
+
+
 
 function Imagemap() {
   const ref = useRef()
@@ -52,9 +71,6 @@ function Imagemap() {
   })
   return <Image ref={ref} position={[0,-5,0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
 }
-
-
-
 
 function LatheScene() {
   const points = React.useMemo(() => {
@@ -73,39 +89,181 @@ function LatheScene() {
   );
 }
 
+
+
+// let sections = gsap.utils.toArray("selection");
+
+// let scrollTween = gsap.to(へ, {
+//     xPercent: -100 * (sections.length - 1),
+//     scale: -100 * (sections.length - 1),
+//     ease: "none", // <-- IMPORTANT!
+//     scrollTrigger: {
+//       trigger: ".container",
+//       pin: true,
+//       scrub: 0.1,
+//       //snap: directionalSnap(1 / (sections.length - 1)),
+//       end: "+=3000"
+//     }
+//   });
+
+// gsap.set(".headerTitle", {y: 100});
+// ScrollTrigger.defaults({markers: {startColor: "green", endColor: "red"}});
+
+// red section
+// gsap.to(".headerTitle", {
+//   y: -130,
+//   duration: 2,
+//   ease: "elastic",
+//   scrollTrigger: {
+//     trigger: ".headerTitle",
+//     containerAnimation: scrollTween,
+//     start: "center",
+//     // toggleActions: "play none none reset",
+//     id: "1",
+//   }
+// });
+
+// gsap.to(".headerTitle", {duration: 0.4, ease: "none", x: -600, y:-10, scale: 0.2, scrollTrigger: {
+//       // trigger: ".headerTitle",
+//       // containerAnimation: scrollTween,
+//       start: "center",
+//       toggleActions: "play none none reset",
+//       id: "1",
+//     }},
+// )
+
+// gsap.to(".heaerTitle", {
+//   y: -130,
+//   duration: 2,
+//   ease: "elastic",
+//   scrollTrigger: {
+//     trigger: ".headerTitle",
+//     containerAnimation: scrollTween,
+//     start: "center",
+//     toggleActions: "play none none reset"
+//   }
+// });
+
+
+
+// gsap.to(".title", .4, {
+//   height: 10,
+//   onComplete: function() {
+//     this.addClass('hide');
+//   }
+
+
+// gsap.set(".headerTitle", {xPercent: 0, yPercent: 0});
+// gsap.to(".headerTitle", {duration: 0.2, ease: "none", x: "-38%", y:-10, scale: 0.2, autoAlpha: 0, scrollTrigger: {
+//       trigger: ".headerTitle",
+//       start: "top 10%",
+//       end: "+=700",
+//       markers:true,
+//       pin:true,
+//       scrub: true
+//       }})
+
+//       gsap.set(".title", {xPercent: 0, yPercent: 0, opacity:1.0});
+// gsap.to(".title", {duration: 0.1, ease: "none", opacity:0, autoAlpha: 0, scrollTrigger: {
+//       trigger: ".headerTitle",
+//       start: "top 20%",
+//       end: "+=700",
+//       markers:true,
+//       pin:true,
+//       scrub: true
+//       }})
+
+
+function Title(){
+  const titleRef = useRef();
+  const logoRef = useRef();
+  useLayoutEffect(()=>{
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(titleRef.current,{
+      opacity:0, duration: 0.1, ease: "power3.inOut", display:'none', scrollTrigger: {
+      trigger: logoRef.current,
+      start: "top",
+      end: "top 50%",
+      markers: true,
+      stagger: 0.1,
+      scrub: true,
+    }
+    });
+    gsap.to(logoRef.current,{
+      opacity:0, duration: 0.1, ease: "power3.inOut", scrollTrigger: {
+      trigger: logoRef.current,
+      start: "top top",
+      end: "bottom top",
+      markers: true,
+      scrub: true,
+    }
+    });
+
+    gsap.to(logoRef.current,{
+      scale: 0.25, duration: 0.25, xPercent: -120, ease: "power3.inOut", scrollTrigger: {
+      trigger: logoRef.current,
+      start: "top",
+      end: "top 30%",
+      markers: true,
+      stagger: 0.7,
+      scrub: true,
+    }
+    });
+  },[]);
+  
+// ---------
+  return (
+    <section ref={titleRef} className="title">
+    
+     {/* <h1 className="headerTitle">
+       CREATIVE <br /> CHORDS
+     </h1> */}
+     <div ref={logoRef}>
+     <Logo/>
+     </div>
+
+   </section>
+  )
+};
+
 function App() {
-  const current = new Date();
-  const date = `${current.getDate()}/${
-    current.getMonth() + 1
-  }/${current.getFullYear()}`;
+  // const ref = useRef();
+  // useFrame((state) => (ref.current.time = state.clock.elapsedTime * 3))
+
   return (
     <section className="main">
       <header className="elements">
-        <section className="date">{date}</section>
-
         <section>
-   
         </section>
-
         <section>
-          <Nav/>
+          {/* <Nav/> */}
         </section>
       </header>
-
-      <main className="container">
+      <main className="container" >
+        <Title />
         <section>
-          <h1>
-            CREATIVE <br /> CHORDS
-          </h1>
-        </section>
-        <Canvas
-          style={{
+           <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 160, 160], fov: 20 }} 
+           style={{
             display: "block",
             height: "100vh",
             width: "100vw",
+            display: 'flex',
+            zIndex:"1",
             backgroundColor: "#000",
-          }}
-        >
+          }}>
+      <fog attach="fog" args={['lightpink', 60, 100]} />
+      <Suspense fallback={null}>
+        <ambientLight intensity={0.5} />
+        {/* <Model position={[-4.5, -4, 0]} rotation={[0, -2.8, 0]} /> */}
+        <spotLight position={[50, 50, -30]} castShadow />
+        <pointLight position={[-10, -10, -10]} color="" intensity={3} />
+        <pointLight position={[0, -5, 5]} intensity={0.5} />
+        <directionalLight position={[0, -5, 0]} color="blue" intensity={2} />
+        <Light />
+        <Environment preset="warehouse" />
+        <Rig />
+      </Suspense>
+      <OrbitControls makeDefault />
           <ScrollControls
             pages={1.1} // Each page takes 100% of the height of the canvas
             distance={1} // A factor that increases scroll bar travel (default: 1)
@@ -126,7 +284,7 @@ function App() {
                 speed={1}
               />
             </Scroll>
-            <Scroll html className="wide">
+            <Scroll html className="wide" id="mission">
               <h1 style={{ color: "white" }}>
                 {" "}
                 MISSION
@@ -142,14 +300,14 @@ function App() {
             </Scroll>
           </ScrollControls>
         </Canvas>
+        </section>
       </main>
-      <main className="featured">
+      <main className="featured" id="profiles">
         <section>
           <h1>
             FEATURED <br /> CREATIVE
           </h1>
-
-          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={false}>
+          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={true}>
           
           <div>
             <Member bkname="DPM" 
@@ -158,6 +316,10 @@ function App() {
             nameMain = 'DPM'
             introDescription = 'Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
             company = 'AKQA'
+            website = ''
+            instagram = ''
+            twitter = ''
+            linkedin = ''
              />
            </div> 
 
@@ -168,34 +330,54 @@ function App() {
             nameMain = 'Nikolaibibo'
             introDescription = 'innovation FTW'
             company = 'Google'
+            website = ''
+            instagram = ''
+            twitter = ''
+            linkedin = ''
              />
            </div> 
 
+           <div>
+            <Member bkname="YOSHI" 
+            imageSrc = './images/YOSHI.png'
+            imageSrcAlt ='Yoshi'
+            nameMain = 'Yoshi'
+            introDescription = 'test'
+            company = 'Ford'
+            website = 'https://www.yoshitsugukosaka.com'
+            instagram = ''
+            twitter = ''
+            linkedin = ''
+             />
+           </div> 
 
           </Carousel>
         </section>
       </main>
-      <footer>
+      {/* <footer id='joinus'>
         <Canvas
-        
           gl={{ alpha: true }}
           camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
-          jkhjhm
           style={{
             backgroundColor: "black",
             display: "block",
-            height: "50vh",
-            width: "100vw",
+            // position: "relative",
+            // height: "100vh",
+            // width: "100vw",
           }}
         >
-        
+        <ScrollControls
+            pages={1.0} // Each page takes 100% of the height of the canvas
+            distance={2} // A factor that increases scroll bar travel (default: 1)
+            damping={4} // Friction, higher is faster (default: 4)
+            horizontal={false} // Can also scroll horizontally (default: false)
+            infinite={false} // Can also scroll infinitely (default: false)
+          >
+            <Scroll>
           <ambientLight />
           <Effects multisamping={8} >
-      
-      {/* <bloomPass  /> */}
       <glitchPass attachArray="passes" />
     </Effects>
-          {/* <OrbitControls /> */}
           <gridHelper
             rotation={[0.8, 1.58, 2.26]}
             args={[160, 150, 20, "white"]}
@@ -207,10 +389,19 @@ function App() {
             args={[160, 50, 20, "white"]}
             position={[0, -20, -2]}
           />
+         
+          </Scroll>
+        </ScrollControls>
         </Canvas>
-      </footer>
+      </footer> */}
     </section>
   );
 }
 
 export default App;
+
+
+
+
+
+

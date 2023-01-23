@@ -1,8 +1,35 @@
 .main {
-  
   align-items: center;
   justify-content: center;
   background-color: #fff;
+}
+
+.title {
+  transition: opacity .5s, height 10s;
+  position: fixed;
+  width: 100%;
+  height: 110vh;
+  bottom: 0px;
+  left: 0px;
+  z-index: 9999;
+  transform: translate3d(0,0,0);
+  background-color: #fff;
+  /* animation: show 1s forwards; */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 300%;
+}
+
+
+
+.logoWrapper{
+  display: flex;
+  width:100%;
+  height:100vh;
+}
+
+.logoWrapper a{ 
+  display: flex;
 }
 
 small {
@@ -124,7 +151,6 @@ small {
   color: #9DA001;
   width: 50%;
   margin: 0px auto;
-  
 }
 
 .Creative img 
