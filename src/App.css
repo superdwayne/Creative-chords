@@ -23,14 +23,23 @@
 
 
 .logoWrapper{
-  display: flex;
   width:100%;
   height:100vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  
 }
 
 .logoWrapper a{ 
-  display: flex;
+    margin-left:auto;
+    margin-right:auto;
+    display:block; 
+    top:50%;
 }
+
+
+
 
 small {
   color: #ff00ff;

@@ -40,8 +40,6 @@ import "./App.css";
 extend({GlitchPass, BloomPass });
 RectAreaLightUniformsLib.init();
 
-// gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
-
 
 function Light() {
   const ref = useRef()
@@ -90,90 +88,6 @@ function LatheScene() {
 }
 
 
-
-// let sections = gsap.utils.toArray("selection");
-
-// let scrollTween = gsap.to(へ, {
-//     xPercent: -100 * (sections.length - 1),
-//     scale: -100 * (sections.length - 1),
-//     ease: "none", // <-- IMPORTANT!
-//     scrollTrigger: {
-//       trigger: ".container",
-//       pin: true,
-//       scrub: 0.1,
-//       //snap: directionalSnap(1 / (sections.length - 1)),
-//       end: "+=3000"
-//     }
-//   });
-
-// gsap.set(".headerTitle", {y: 100});
-// ScrollTrigger.defaults({markers: {startColor: "green", endColor: "red"}});
-
-// red section
-// gsap.to(".headerTitle", {
-//   y: -130,
-//   duration: 2,
-//   ease: "elastic",
-//   scrollTrigger: {
-//     trigger: ".headerTitle",
-//     containerAnimation: scrollTween,
-//     start: "center",
-//     // toggleActions: "play none none reset",
-//     id: "1",
-//   }
-// });
-
-// gsap.to(".headerTitle", {duration: 0.4, ease: "none", x: -600, y:-10, scale: 0.2, scrollTrigger: {
-//       // trigger: ".headerTitle",
-//       // containerAnimation: scrollTween,
-//       start: "center",
-//       toggleActions: "play none none reset",
-//       id: "1",
-//     }},
-// )
-
-// gsap.to(".heaerTitle", {
-//   y: -130,
-//   duration: 2,
-//   ease: "elastic",
-//   scrollTrigger: {
-//     trigger: ".headerTitle",
-//     containerAnimation: scrollTween,
-//     start: "center",
-//     toggleActions: "play none none reset"
-//   }
-// });
-
-
-
-// gsap.to(".title", .4, {
-//   height: 10,
-//   onComplete: function() {
-//     this.addClass('hide');
-//   }
-
-
-// gsap.set(".headerTitle", {xPercent: 0, yPercent: 0});
-// gsap.to(".headerTitle", {duration: 0.2, ease: "none", x: "-38%", y:-10, scale: 0.2, autoAlpha: 0, scrollTrigger: {
-//       trigger: ".headerTitle",
-//       start: "top 10%",
-//       end: "+=700",
-//       markers:true,
-//       pin:true,
-//       scrub: true
-//       }})
-
-//       gsap.set(".title", {xPercent: 0, yPercent: 0, opacity:1.0});
-// gsap.to(".title", {duration: 0.1, ease: "none", opacity:0, autoAlpha: 0, scrollTrigger: {
-//       trigger: ".headerTitle",
-//       start: "top 20%",
-//       end: "+=700",
-//       markers:true,
-//       pin:true,
-//       scrub: true
-//       }})
-
-
 function Title(){
   const titleRef = useRef();
   const logoRef = useRef();
@@ -189,6 +103,7 @@ function Title(){
       scrub: true,
     }
     });
+    
     gsap.to(logoRef.current,{
       opacity:0, duration: 0.1, ease: "power3.inOut", scrollTrigger: {
       trigger: logoRef.current,
