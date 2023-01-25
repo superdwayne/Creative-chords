@@ -1,9 +1,9 @@
 import React, { useRef, useState, Suspense, useLayoutEffect } from "react";
 import * as THREE from "three";
 import Member from './components/Section/Member'
-import { Nav, DarkMode } from './components/Top/Nav'
+// import { Nav, DarkMode } from './components/Top/Nav'
 import { Logo } from './components/Top/Logo'
-import { Text } from './components/Text'
+// import { Text } from './components/Text'
 import {
   Canvas,
   useFrame,
@@ -11,12 +11,11 @@ import {
   useLoader,
   extend,
 } from "@react-three/fiber";
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
-
-import { gsap, ScrollTrigger, Draggable, MotionPathPlugin } from "gsap/all";
-
 
 import {
   Scroll,
@@ -29,16 +28,19 @@ import {
   Effects,
   Image
 } from "@react-three/drei";
+
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib';
 
 
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./App.css";
+import Model from "./components/Model";
 
 
 extend({GlitchPass, BloomPass });
 RectAreaLightUniformsLib.init();
+// gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
 
 function Light() {
@@ -55,10 +57,8 @@ function Rig() {
   const [vec] = useState(() => new THREE.Vector3())
   const { camera, mouse } = useThree()
   useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, 1, 60), 0.05))
-  return <CameraShake maxYaw={0.01} maxPitch={0.01} maxRoll={0.01} yawFrequency={0.2} pitchFrequency={0.2} rollFrequency={0.4} />
+  return <CameraShake maxYaw={0.001} maxPitch={0.001} maxRoll={0.01} yawFrequency={0.2} pitchFrequency={0.2} rollFrequency={0.4} />
 }
-
-
 
 function Imagemap() {
   const ref = useRef()
@@ -67,7 +67,7 @@ function Imagemap() {
     ref.current.material.grayscale = 0 // between 0 and 1
     ref.current.material.color.set(0x7289da) // mix-in color
   })
-  return <Image ref={ref} position={[0,-5,0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
+  return <Image ref={ref} position={[0,-5,0]} scale={20}  transparent url="./images/icon_clyde_white_RGB.png" />
 }
 
 function LatheScene() {
@@ -87,63 +87,51 @@ function LatheScene() {
   );
 }
 
-
 function Title(){
+//   gsap.registerPlugin(ScrollTrigger); 
   const titleRef = useRef();
   const logoRef = useRef();
-  useLayoutEffect(()=>{
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.to(titleRef.current,{
-      opacity:0, duration: 0.1, ease: "power3.inOut", display:'none', scrollTrigger: {
-      trigger: logoRef.current,
-      start: "top",
-      end: "top 50%",
-      markers: true,
-      stagger: 0.1,
-      scrub: true,
-    }
-    });
-    
-    gsap.to(logoRef.current,{
-      opacity:0, duration: 0.1, ease: "power3.inOut", scrollTrigger: {
-      trigger: logoRef.current,
-      start: "top top",
-      end: "bottom top",
-      markers: true,
-      scrub: true,
-    }
-    });
+//   useLayoutEffect(()=>{
+//     gsap.to(titleRef.current,{
+//       opacity:0, display: 'none', duration: 0.25, ease: "power3.inOut", scrollTrigger: {
+//       trigger: logoRef.current,
+//       start: "top top",
+//       end: "bottom to",
+//       markers: true,
+//       scrub: true,
+//       stagger:true,
+//     }
+//     });
 
-    gsap.to(logoRef.current,{
-      scale: 0.25, duration: 0.25, xPercent: -120, ease: "power3.inOut", scrollTrigger: {
-      trigger: logoRef.current,
-      start: "top",
-      end: "top 30%",
-      markers: true,
-      stagger: 0.7,
-      scrub: true,
-    }
-    });
-  },[]);
+//     gsap.to(logoRef.current,{
+//       scale: 0.25, duration: 0.25, xPercent: -120, ease: "power3.inOut", scrollTrigger: {
+//       trigger: logoRef.current,
+//       start: "top",
+//       end: "top 10%",
+//       markers: true,
+//       stagger: 0.7,
+//       scrub: true,
+//     }
+//     });
+//   },[]);
   
 // ---------
+
   return (
     <section ref={titleRef} className="title">
-    
-     {/* <h1 className="headerTitle">
-       CREATIVE <br /> CHORDS
-     </h1> */}
      <div ref={logoRef}>
      <Logo/>
-     </div>
+     <div className="titleNav">
+        <p>Join Us:</p> 
+        <a href=""><Canvas className="discordLink"><Imagemap /></Canvas></a>
+        </div>
 
+        </div>
    </section>
   )
 };
 
 function App() {
-  // const ref = useRef();
-  // useFrame((state) => (ref.current.time = state.clock.elapsedTime * 3))
 
   return (
     <section className="main">
@@ -152,31 +140,34 @@ function App() {
         </section>
         <section>
           {/* <Nav/> */}
+          <Title />
         </section>
       </header>
       <main className="container" >
-        <Title />
         <section>
            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 160, 160], fov: 20 }} 
            style={{
             display: "block",
             height: "100vh",
             width: "100vw",
-            display: 'flex',
+            // display: 'flex',
             zIndex:"1",
             backgroundColor: "#000",
           }}>
+            
       <fog attach="fog" args={['lightpink', 60, 100]} />
       <Suspense fallback={null}>
         <ambientLight intensity={0.5} />
-        {/* <Model position={[-4.5, -4, 0]} rotation={[0, -2.8, 0]} /> */}
+        {/* <Model modelPath={"./spaceship.glb"} scale="1" position="0,0,0"/> */}
         <spotLight position={[50, 50, -30]} castShadow />
         <pointLight position={[-10, -10, -10]} color="" intensity={3} />
         <pointLight position={[0, -5, 5]} intensity={0.5} />
         <directionalLight position={[0, -5, 0]} color="blue" intensity={2} />
         <Light />
         <Environment preset="warehouse" />
-        <Rig />
+        <Rig /> 
+        <Model modelPath={"https://thinkuldeep.com/modelviewer/Astronaut.glb"} />
+
       </Suspense>
       <OrbitControls makeDefault />
           <ScrollControls
@@ -258,7 +249,7 @@ function App() {
             imageSrcAlt ='Yoshi'
             nameMain = 'Yoshi'
             introDescription = 'test'
-            company = 'Ford'
+            company = 'test'
             website = 'https://www.yoshitsugukosaka.com'
             instagram = ''
             twitter = ''

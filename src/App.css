@@ -5,35 +5,48 @@
 }
 
 .title {
-  transition: opacity .5s, height 10s;
-  position: fixed;
   width: 100%;
-  height: 110vh;
+  height: 100vh;
   bottom: 0px;
   left: 0px;
   z-index: 9999;
   transform: translate3d(0,0,0);
+  transition: opacity .5s, height 10s; 
+  position: fixed;
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 300%;
 }
 
+.titleNav{
+  width: 100%;
+  padding: 0px;
+  /* margin: 0px auto 0px auto; */
+  position: fixed;
+  left: 30%;
+  bottom: 4em;
+  height: auto;
+  transform: translate(-50%);
+  text-align: center;
+  font-family: Akira;
+}
+.titleNav canvas{
+  /* display: block; */
+  /* position: relative; */
+}
 
-
-.logoWrapper a{
+.logoWrapper{
   justify-content: center;
   display: flex;
   cursor:pointer !important;
+  align-items: center;
+   margin-right:0;
 }
 
-.logoWrapper svg{
-  position: absolute;
-margin:auto;
-top:30%;
+.logoWrapper a svg{
+ margin-top:25%;
 }
-
-
 
 small {
   color: #ff00ff;
@@ -107,12 +120,12 @@ small {
 
 .featured h1  {
   font-family: Akira;
-  font-size: 120px;
+  font-size: 100px;
   text-align: center;
   color: #fff;
-  padding-top: 10vh;
+  padding-top: 20vh;
   margin: 0px;
-  padding-bottom: 10vh;
+  padding-bottom: 2vh;
 }
 .featured {
   background-color: #000;
@@ -165,6 +178,31 @@ small {
   width: 40% !important;
   padding-top: 60px;
 }
+
+
+.Social_nav {
+  width: 100%;
+  position: relative;
+  justify-content: center;
+  display:flex;
+  z-index: 0;
+}
+
+
+.Social_nav > ul{
+  width: 380px !important;
+  list-style-type: none;
+  display:flex;
+  padding:0;
+}
+
+.Social_nav > img {
+  margin:0;
+  width: 10%;
+  justify-content: center;
+  padding:0;
+}
+
 
 header , .elements > section {
   display: flex;
