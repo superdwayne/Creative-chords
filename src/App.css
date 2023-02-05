@@ -40,6 +40,8 @@
 .logo_size_min{
   transform: translate() scale(1.25);
   /* -webkit-transform: translate(0); */
+  transition: 1000ms; 
+
 }
 
 .logo_size_max{
