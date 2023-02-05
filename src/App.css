@@ -38,9 +38,10 @@
 }
 
 .logo_size_min{
-  transform: translate() scale(1.25);
+  transform: translate(0,500px) scale(1.25);
   /* -webkit-transform: translate(0); */
-  transition: 1000ms; 
+  transition: 500ms ease; 
+  
 
 }
 
@@ -51,8 +52,8 @@
 
   /* -webkit-transform: scale(.25) !important; */ 
   position:sticky;
-  transform: translate(-50px,100px) scale(0.25) !important;
-  transition: 1000ms; 
+  transform: translate(-750px,100px) scale(0.25) !important;
+  transition: 500ms ease;
 
 }
 
