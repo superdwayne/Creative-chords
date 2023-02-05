@@ -17,6 +17,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: 300%;
+  padding-top:75vh;
 }
 
 .titleNav{
@@ -36,6 +37,23 @@
   /* position: relative; */
 }
 
+.logo_size_min{
+  transform: translate() scale(1.25);
+  /* -webkit-transform: translate(0); */
+}
+
+.logo_size_max{
+   fill:#ff0000;
+  /* transform:scale(.25) !important;
+  transform:translate(9%, 25%) scale(1.25) !important; */
+
+  /* -webkit-transform: scale(.25) !important; */ 
+  position:sticky;
+  transform: translate(-50px,100px) scale(0.25) !important;
+  transition: 1000ms; 
+
+}
+
 .logoWrapper{
   justify-content: center;
   display: flex;
@@ -45,7 +63,9 @@
 }
 
 .logoWrapper a svg{
- margin-top:25%;
+ bottom:33%;
+ left:25%;
+ position: fixed;
 }
 
 small {
