@@ -3,10 +3,7 @@
   justify-content: center;
   background-color: #fff;
 }
-/* section{
-  width:100%;
-  height:auto;
-} */
+
 .hide{
   opacity: 0 !important;
   pointer-events: none !important;
@@ -53,7 +50,7 @@
   position:fixed; 
   transform: translate(2em, 1em) scale(0.25);
   /* -webkit-transform: translate(2em, 6em) scale(0.25); */
-  transition: 700ms ease; 
+  transition: 750ms ease; 
 }
 
 .logo{
@@ -65,7 +62,7 @@
   justify-content: center;
   transform: translate(0) scale(1.25);
   -webkit-transform: translate(0) scale(1.25);
-  transition: 700ms ease;
+  transition: 750ms ease;
 }
 
 /* .logoWrapper{
@@ -93,7 +90,7 @@ small {
 
 
 .container{
-  margin-top: 150%
+  margin-top: 110%
 }
 
 .container h1 {
@@ -101,6 +98,30 @@ small {
   font-size: 90px;
   text-align: center;
 }
+
+
+
+.Social_nav {
+  justify-content: center;
+  display:flex;
+  z-index: 0;
+}
+
+
+.Social_nav > ul{
+  width: 380px !important;
+  list-style-type: none;
+  display:flex;
+  padding:0;
+}
+
+.Social_nav > img {
+  margin:0;
+  width: 10%;
+  justify-content: center;
+  padding:0;
+}
+
 
 @media screen and (max-width: 480px) {
   .container h1 {
@@ -220,7 +241,8 @@ small {
   width: 40% !important;
   padding-top: 60px;
 }
-.discordLink{
+
+/* .discordLink{
   width: 100%;
   padding: 0px;
   position: fixed;
@@ -228,15 +250,12 @@ small {
   height: auto;
   text-align: center;
   font-family: Akira;
-}
+} */
 
 
 
 .Social_nav {
-  width: 100%;
-  height:auto;
-  padding-bottom:10%;
-  position: relative;
+
   justify-content: center;
   display:flex;
   z-index: 0;
@@ -248,12 +267,6 @@ small {
   list-style-type: none;
   display:flex;
   padding:0;
-}
-
-.Social_nav > ul > li{
-  /* width: 380px !important; */
-  display:block;
-  margin:10px;
 }
 
 .Social_nav > img {

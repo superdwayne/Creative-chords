@@ -95,31 +95,6 @@ function Title(){
   const titleRef = useRef();
   const logoRef = useRef();
 
-  // const getscroll = () => {
-  //   const scroll = Math.abs(titleRef.current.getBoundingClientRect().top - titleRef.current.offsetTop);
-  //   console.log(scroll);
-  // };
-
-  // const useScrollHandler = (target) => {
-  //   const [scroll, setScroll] = useState(false);
-  //   useEffect(() => {
-  //     document.addEventListener("scroll", () => {
-  //       const scrollCheck = window.scrollY < target.current.getBoundingClientRect().bottom;
-  //       if (scrollCheck !== scroll) {
-  //         setScroll(scrollCheck)
-  //       }
-  //     })
-  //   })
-
-  //   return () => {
-  //     document.removeEventListener("scroll", onScroll)
-  //    }
-  //  }, [scroll, setScroll])
-   
-  //  return scroll
-   
-  //  }
-
 
 const useScrollHandler = (target) => {
     // setting initial value to true
@@ -184,11 +159,6 @@ const scroll_half =useScrollSubHandler(titleRef);
 // const scrollToBottom = useScrollHandler(titleRef);
 var titleBg =  scroll ? 'hide' : 'titleBg';
 var logoSize = scroll_half ? 'logo_min' : 'logo';
-
-// $(window).scroll(function(){
-//     $(".top").css("opacity", 1 - $(window).scrollTop() / 250);
-//   });
-
 
   return (
     <section>
