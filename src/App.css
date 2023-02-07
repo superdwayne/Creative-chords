@@ -3,15 +3,26 @@
   justify-content: center;
   background-color: #fff;
 }
+/* section{
+  width:100%;
+  height:auto;
+} */
+.hide{
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: 600ms ease; 
+  display:none;
+}
 
-.title {
+.titleBg {
   width: 100%;
-  height: 100vh;
+  height: 110vh;
   bottom: 0px;
   left: 0px;
   z-index: 9999;
+  opacity: 1;
   transform: translate3d(0,0,0);
-  transition: opacity .5s, height 10s; 
+  transition: 600ms ease; 
   position: fixed;
   background-color: #fff;
   background-repeat: no-repeat;
@@ -23,51 +34,51 @@
 .titleNav{
   width: 100%;
   padding: 0px;
-  /* margin: 0px auto 0px auto; */
   position: fixed;
-  left: 30%;
   bottom: 4em;
   height: auto;
-  transform: translate(-50%);
   text-align: center;
   font-family: Akira;
 }
+
 .titleNav canvas{
-  /* display: block; */
-  /* position: relative; */
+  transform: scale(0.25);
 }
 
-.logo_size_min{
-  transform: translate(0,500px) scale(1.25);
-  /* -webkit-transform: translate(0); */
-  transition: 500ms ease; 
-  
-
+.logo_min{
+  fill:#ff0000;
+  z-index: 99999 !important;
+  left: 0;
+  top:0;
+  position:fixed; 
+  transform: translate(2em, 1em) scale(0.25);
+  /* -webkit-transform: translate(2em, 6em) scale(0.25); */
+  transition: 700ms ease; 
 }
 
-.logo_size_max{
-   fill:#ff0000;
-  /* transform:scale(.25) !important;
-  transform:translate(9%, 25%) scale(1.25) !important; */
-
-  /* -webkit-transform: scale(.25) !important; */ 
-  position:sticky;
-  transform: translate(-750px,100px) scale(0.25) !important;
-  transition: 500ms ease;
-
+.logo{
+  opacity: 1 !important;
+  /* width: 100%; */
+  position:fixed; 
+  z-index: 99999 !important;
+  left: 16%;
+  justify-content: center;
+  transform: translate(0) scale(1.25);
+  -webkit-transform: translate(0) scale(1.25);
+  transition: 700ms ease;
 }
 
-.logoWrapper{
+/* .logoWrapper{
   justify-content: center;
   display: flex;
   cursor:pointer !important;
   align-items: center;
    margin-right:0;
-}
+} */
 
 .logoWrapper a svg{
- bottom:33%;
- left:25%;
+ top:8em;
+ left:0;
  position: fixed;
 }
 
@@ -78,6 +89,11 @@ small {
 .wide {
   width: 100%;
   padding-top: 20vh;
+}
+
+
+.container{
+  margin-top: 150%
 }
 
 .container h1 {
@@ -141,6 +157,12 @@ small {
   font-size: 60px;
 }
 
+
+.featured{
+  padding-bottom:20%;
+  background-color: #000;
+}
+
 .featured h1  {
   font-family: Akira;
   font-size: 100px;
@@ -149,9 +171,6 @@ small {
   padding-top: 20vh;
   margin: 0px;
   padding-bottom: 2vh;
-}
-.featured {
-  background-color: #000;
 }
 
 .Creative {
@@ -201,10 +220,22 @@ small {
   width: 40% !important;
   padding-top: 60px;
 }
+.discordLink{
+  width: 100%;
+  padding: 0px;
+  position: fixed;
+  bottom: 4em;
+  height: auto;
+  text-align: center;
+  font-family: Akira;
+}
+
 
 
 .Social_nav {
   width: 100%;
+  height:auto;
+  padding-bottom:10%;
   position: relative;
   justify-content: center;
   display:flex;
@@ -217,6 +248,12 @@ small {
   list-style-type: none;
   display:flex;
   padding:0;
+}
+
+.Social_nav > ul > li{
+  /* width: 380px !important; */
+  display:block;
+  margin:10px;
 }
 
 .Social_nav > img {

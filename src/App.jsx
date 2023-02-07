@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect,Suspense, useLayoutEffect,ScrollView,View } from "react";
-import useScrollPercentage from 'react-scroll-percentage-hook';
 
 import 'intersection-observer'
 import * as THREE from "three";
@@ -13,8 +12,7 @@ import {
   useLoader,
   extend,
 } from "@react-three/fiber";
-// import { gsap } from 'gsap';
-// import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
 
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
@@ -123,17 +121,6 @@ function Title(){
   //  }
 
 
-  // var animateLogo = anime({
-  //   targets: target,
-  //   cx: '10',
-  //   strokeWidth: '10',
-  //   cy: '10',
-  //   autoplay: false
-  // });
-  
-
-
-
 const useScrollHandler = (target) => {
     // setting initial value to true
     const [scroll, setScroll] = useState(false)
@@ -141,34 +128,29 @@ const useScrollHandler = (target) => {
     
     useEffect(() => {
       const onScroll = () => {
-        const length = target.current.getBoundingClientRect().bottom;
-        // const scrollCheckHalf = window.scrollY < fullLength/2;
-        const scrollCheck = window.scrollY < length;
-        // if(scrollCheckHalf !== scroll){
-        //   if(scrollCheckHalf){
-        //     setScroll(scrollCheckHalf);
-        //   }
+        // const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight / 3;
+        // if (bottom) {
+        //   console.log(bottom);
         // }
+        const length = target.current.getBoundingClientRect().bottom;
+        const scrollCheck = window.scrollY <  length;
+        // const scrollCheck = bottom;
 
         if (scrollCheck !== scroll) { 
             setScroll(scrollCheck);
+
       }
     }
-    
     // setting the event handler from web API
-    document.addEventListener("scroll", onScroll)
-    
-    // cleaning up from the web API
+    document.addEventListener("scroll", onScroll, {
+      passive: true
+    });
      return () => {
        document.removeEventListener("scroll", onScroll)
       }
     }, [scroll, setScroll])
-    
     return scroll
-    
     }
-
-
 
     const useScrollSubHandler = (target) => {
       // setting initial value to true
@@ -177,68 +159,55 @@ const useScrollHandler = (target) => {
       
       useEffect(() => {
         const onScroll = () => {
-          const length = target.current.getBoundingClientRect().bottom/2;
-          // const scrollCheckHalf = window.scrollY < fullLength/2;
-          const scrollCheck = window.scrollY < length;
-          // if(scrollCheckHalf !== scroll){
-          //   if(scrollCheckHalf){
-          //     setScroll(scrollCheckHalf);
-          //   }
-          // }
+          const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight/2;
+      
+          // const length = target.current.getBoundingClientRect().bottom / 2;
+          // const scrollCheck = window.scrollY < length;
+          const scrollCheck = bottom;
           if (scrollCheck !== scroll) { 
               setScroll(scrollCheck);
         }
       }
-      
       // setting the event handler from web API
-      document.addEventListener("scroll", onScroll)
-      
-      // cleaning up from the web API
+      document.addEventListener("scroll", onScroll,{
+        passive: true
+      });
        return () => {
          document.removeEventListener("scroll", onScroll)
         }
       }, [scroll, setScroll])
-      
       return scroll
-      
       }
       
 const scroll = useScrollHandler(titleRef);
 const scroll_half =useScrollSubHandler(titleRef);
 // const scrollToBottom = useScrollHandler(titleRef);
-var logoSize = scroll_half ? 'logo_size_min' : 'logo_size_max';
+var titleBg =  scroll ? 'hide' : 'titleBg';
+var logoSize = scroll_half ? 'logo_min' : 'logo';
+
+// $(window).scroll(function(){
+//     $(".top").css("opacity", 1 - $(window).scrollTop() / 250);
+//   });
+
 
   return (
     <section>
-     {/* <div ref={logoRef}
-      style={{
-        position: scroll ? "fixed" : "sticky",
-        opacity: scroll ? 0 : 1,
-        transition: "600ms ease-in-out",
-      }} > */}
-      <div ref={titleRef} 
-    className="title"     
-    style={{
-      opacity: scroll ? 1 : 0,
-      // position: scroll ? "fixed" : "relative",
-      transition: "600ms ease-in-out",
-    }}>
-      <div ref={logoRef} className = {logoSize}
-       style={{
-        // position: scroll ? "fixed" : "relative",
-        // transform: scroll_half ? 'scale(1.5)' : 'scale(1.0)',
-        // width: scroll_half ? "100%" : "30%",
-      }}>
-
-     <Logo />
+<div ref={logoRef} className = {logoSize}>
+         <Logo />
      </div>
+      <div
+    className = 'titleBg'  
+    ref={titleRef}  
+    style={{
+      opacity: scroll_half ? 0 : 1,
+      display: scroll_half ? "none" : "block",
+    }}>
 
-     <div className="titleNav">
+     <div className="titleNav"  >
         <p>Join Us:</p> 
         <a href=""><Canvas className="discordLink"><Imagemap /></Canvas></a>
         </div>
         </div>
-        {/* </div> */}
    </section>
   )
 };
@@ -246,96 +215,6 @@ var logoSize = scroll_half ? 'logo_size_min' : 'logo_size_max';
 function lerp(x, y, a){
   return (1 - a) * x + a * y
 }
-
-// // Used to fit the lerps to start and end at specific scrolling percentages
-// function scalePercent(start, end) {
-//   return (scrollPercent - start) / (end - start)
-// }
-
-// const animationScripts: { start: number; end: number; func: () => void }[] = []
-
-// //add an animation that flashes the cube through 100 percent of scroll
-// animationScripts.push({
-//   start: 0,
-//   end: 101,
-//   func: () => {
-//       let g = material.color.g
-//       g -= 0.05
-//       if (g <= 0) {
-//           g = 1.0
-//       }
-//       material.color.g = g
-//   },
-// })
-
-// //add an animation that moves the cube through first 40 percent of scroll
-// animationScripts.push({
-//   start: 0,
-//   end: 40,
-//   func: () => {
-//       camera.lookAt(cube.position)
-//       camera.position.set(0, 1, 2)
-//       cube.position.z = lerp(-10, 0, scalePercent(0, 40))
-//       //console.log(cube.position.z)
-//   },
-// })
-
-// //add an animation that rotates the cube between 40-60 percent of scroll
-// animationScripts.push({
-//   start: 40,
-//   end: 60,
-//   func: () => {
-//       camera.lookAt(cube.position)
-//       camera.position.set(0, 1, 2)
-//       cube.rotation.z = lerp(0, Math.PI, scalePercent(40, 60))
-//       //console.log(cube.rotation.z)
-//   },
-// })
-
-// //add an animation that moves the camera between 60-80 percent of scroll
-// animationScripts.push({
-//   start: 60,
-//   end: 80,
-//   func: () => {
-//       camera.position.x = lerp(0, 5, scalePercent(60, 80))
-//       camera.position.y = lerp(1, 5, scalePercent(60, 80))
-//       camera.lookAt(cube.position)
-//       //console.log(camera.position.x + " " + camera.position.y)
-//   },
-// })
-
-// //add an animation that auto rotates the cube from 80 percent of scroll
-// animationScripts.push({
-//   start: 80,
-//   end: 101,
-//   func: () => {
-//       //auto rotate
-//       cube.rotation.x += 0.01
-//       cube.rotation.y += 0.01
-//   },
-// })
-
-// function playScrollAnimations() {
-//   animationScripts.forEach((a) => {
-//       if (scrollPercent >= a.start && scrollPercent < a.end) {
-//           a.func()
-//       }
-//   })
-// }
-
-// let scrollPercent = 0
-
-// document.body.onscroll = () => {
-//   //calculate the current scroll progress as a percentage
-//   scrollPercent =
-//       ((document.documentElement.scrollTop || document.body.scrollTop) /
-//           ((document.documentElement.scrollHeight ||
-//               document.body.scrollHeight) -
-//               document.documentElement.clientHeight)) *
-//       100;
-
-
-
 
 function App() {
 
@@ -356,8 +235,8 @@ function App() {
             display: "block",
             height: "100vh",
             width: "100vw",
-            // display: 'flex',
-            zIndex:"1",
+            position: 'relative',
+            // zIndex:"1",
             backgroundColor: "#000",
           }}>
             
