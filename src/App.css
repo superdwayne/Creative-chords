@@ -1,7 +1,7 @@
 .main {
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: #000;
 }
 
 .hide{
@@ -43,7 +43,7 @@
 }
 
 .logo_min{
-  fill:#ff0000;
+  fill:#0ff000;
   z-index: 99999 !important;
   left: 0;
   top:0;
