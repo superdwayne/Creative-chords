@@ -55,7 +55,6 @@
 
 .logo{
   opacity: 1 !important;
-  /* width: 100%; */
   position:fixed; 
   z-index: 99999 !important;
   left: 16%;
@@ -63,6 +62,10 @@
   transform: translate(0) scale(1.25);
   -webkit-transform: translate(0) scale(1.25);
   transition: 750ms ease;
+  /* display:grid;
+  place-items: center;
+  align-content: center;
+  min-height: 100vh; */
 }
 
 /* .logoWrapper{
@@ -77,6 +80,7 @@
  top:8em;
  left:0;
  position: fixed;
+
 }
 
 small {
