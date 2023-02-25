@@ -1,8 +1,86 @@
 .main {
-  
   align-items: center;
   justify-content: center;
+  background-color: #000;
+}
+
+.hide{
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: 600ms ease; 
+  display:none;
+}
+
+.titleBg {
+  width: 100%;
+  height: 110vh;
+  bottom: 0px;
+  left: 0px;
+  z-index: 9999;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  transition: 600ms ease; 
+  position: fixed;
   background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 300%;
+  padding-top:75vh;
+}
+
+.titleNav{
+  width: 100%;
+  padding: 0px;
+  position: fixed;
+  bottom: 4em;
+  height: auto;
+  text-align: center;
+  font-family: Akira;
+}
+
+.titleNav canvas{
+  transform: scale(0.25);
+}
+
+.logo_min{
+  fill:#0ff000;
+  z-index: 99999 !important;
+  left: 0;
+  top:0;
+  position:fixed; 
+  transform: translate(2em, 1em) scale(0.25);
+  /* -webkit-transform: translate(2em, 6em) scale(0.25); */
+  transition: 750ms ease; 
+}
+
+.logo{
+  opacity: 1 !important;
+  position:fixed; 
+  z-index: 99999 !important;
+  left: 16%;
+  justify-content: center;
+  transform: translate(0) scale(1.25);
+  -webkit-transform: translate(0) scale(1.25);
+  transition: 750ms ease;
+  /* display:grid;
+  place-items: center;
+  align-content: center;
+  min-height: 100vh; */
+}
+
+/* .logoWrapper{
+  justify-content: center;
+  display: flex;
+  cursor:pointer !important;
+  align-items: center;
+   margin-right:0;
+} */
+
+.logoWrapper a svg{
+ top:8em;
+ left:0;
+ position: fixed;
+
 }
 
 small {
@@ -14,11 +92,40 @@ small {
   padding-top: 20vh;
 }
 
+
+.container{
+  margin-top: 110%
+}
+
 .container h1 {
   font-family: Akira;
   font-size: 90px;
   text-align: center;
 }
+
+
+
+.Social_nav {
+  justify-content: center;
+  display:flex;
+  z-index: 0;
+}
+
+
+.Social_nav > ul{
+  width: 380px !important;
+  list-style-type: none;
+  display:flex;
+  padding:0;
+}
+
+.Social_nav > img {
+  margin:0;
+  width: 10%;
+  justify-content: center;
+  padding:0;
+}
+
 
 @media screen and (max-width: 480px) {
   .container h1 {
@@ -75,17 +182,20 @@ small {
   font-size: 60px;
 }
 
+
+.featured{
+  padding-bottom:20%;
+  background-color: #000;
+}
+
 .featured h1  {
   font-family: Akira;
-  font-size: 120px;
+  font-size: 100px;
   text-align: center;
   color: #fff;
-  padding-top: 10vh;
+  padding-top: 20vh;
   margin: 0px;
-  padding-bottom: 10vh;
-}
-.featured {
-  background-color: #000;
+  padding-bottom: 2vh;
 }
 
 .Creative {
@@ -124,7 +234,6 @@ small {
   color: #9DA001;
   width: 50%;
   margin: 0px auto;
-  
 }
 
 .Creative img 
@@ -136,6 +245,41 @@ small {
   width: 40% !important;
   padding-top: 60px;
 }
+
+/* .discordLink{
+  width: 100%;
+  padding: 0px;
+  position: fixed;
+  bottom: 4em;
+  height: auto;
+  text-align: center;
+  font-family: Akira;
+} */
+
+
+
+.Social_nav {
+
+  justify-content: center;
+  display:flex;
+  z-index: 0;
+}
+
+
+.Social_nav > ul{
+  width: 380px !important;
+  list-style-type: none;
+  display:flex;
+  padding:0;
+}
+
+.Social_nav > img {
+  margin:0;
+  width: 10%;
+  justify-content: center;
+  padding:0;
+}
+
 
 header , .elements > section {
   display: flex;
@@ -155,31 +299,4 @@ html,body #root{
   margin:0;
   padding: 0;
   background:'#282c340';
-}
-
-.atomic{
-  /* width:100%; */
-  /* left:10vw; */
-  display: flex;
-  font-size: 3vw;
-}
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

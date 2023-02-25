@@ -1,7 +1,10 @@
-import React, { useRef, useState, Suspense } from "react";
+import React, { useRef, useState, useEffect, Suspense, useLayoutEffect, ScrollView, View } from "react";
+
+import 'intersection-observer'
 import * as THREE from "three";
 import Member from './components/Section/Member'
-import { Nav, DarkMode } from './components/Top/Nav'
+// import { Nav, DarkMode } from './components/Top/Nav'
+import { Logo } from './components/Top/Logo'
 import {
   Canvas,
   useFrame,
@@ -10,37 +13,52 @@ import {
   extend,
 } from "@react-three/fiber";
 
-import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
-import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
-
 import {
   Scroll,
+  useScroll,
   ScrollControls,
   Stars,
   Lathe,
+  CameraShake,
+  Environment,
   OrbitControls,
+  MeshReflectorMaterial,
   Effects,
+  Stage,
   Image
 } from "@react-three/drei";
+
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib';
+
+
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
 import { Carousel } from "react-responsive-carousel";
+
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./App.css";
-extend({GlitchPass, BloomPass });
+import Model from "./components/Model";
 
-function Box(props) {
-  // This reference will give us direct access to the mesh
-  const mesh = useRef()
+extend({ GlitchPass, BloomPass });
+RectAreaLightUniformsLib.init();
+// gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin); 
 
+
+function Light() {
+  const ref = useRef()
+  useFrame((_) => (ref.current.rotation.x = _.clock.elapsedTime))
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={[0.5, 0.1, 0,1]}
-      >
-      <boxGeometry args={[10, 0.5, 0]} />
-      <meshStandardMaterial color="orange"   />
-    </mesh>
+    <group ref={ref}>
+      <rectAreaLight width={15} height={100} position={[30, 30, -10]} intensity={5} onUpdate={(self) => self.lookAt(0, 0, 0)} />
+    </group>
   )
+}
+
+function Rig() {
+  const [vec] = useState(() => new THREE.Vector3())
+  const { camera, mouse } = useThree()
+  useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, 1, 60), 0.05))
+  return <CameraShake maxYaw={0.001} maxPitch={0.001} maxRoll={0.01} yawFrequency={0.2} pitchFrequency={0.2} rollFrequency={0.4} />
 }
 
 function Imagemap() {
@@ -50,11 +68,8 @@ function Imagemap() {
     ref.current.material.grayscale = 0 // between 0 and 1
     ref.current.material.color.set(0x7289da) // mix-in color
   })
-  return <Image ref={ref} position={[0,-5,0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
+  return <Image ref={ref} position={[0, -5, 0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
 }
-
-
-
 
 function LatheScene() {
   const points = React.useMemo(() => {
@@ -73,129 +88,284 @@ function LatheScene() {
   );
 }
 
+
+function Title() {
+  const titleRef = useRef();
+  const logoRef = useRef();
+  const containerRef = useRef();
+  const [isVisible, setIsVisible] = useState(false);
+
+  const callbackFunction = (entries) => {
+    const [entry] = entries
+    setIsVisible(entry.isIntersecting)
+  }
+  const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 1.0
+  }
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(callbackFunction, options)
+    if (containerRef.current) observer.observe(containerRef.current)
+    return () => {
+      if (containerRef.current) observer.unobserve(containerRef.current)
+    }
+  }, [containerRef, options])
+
+
+  const useScrollHandler = (target) => {
+    // setting initial value to true
+    const [scroll, setScroll] = useState(false)
+    // running on mount
+
+    useEffect(() => {
+      const onScroll = () => {
+        // const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight / 3;
+        // if (bottom) {
+        //   console.log(bottom);
+        // }
+        const length = target.current.getBoundingClientRect().bottom;
+        const scrollCheck = window.scrollY < length;
+        // const scrollCheck = bottom;
+
+        if (scrollCheck !== scroll) {
+          setScroll(scrollCheck);
+
+        }
+      }
+      // setting the event handler from web API
+      document.addEventListener("scroll", onScroll, {
+        passive: true
+      });
+      return () => {
+        document.removeEventListener("scroll", onScroll)
+      }
+    }, [scroll, setScroll])
+    return scroll
+  }
+
+  const useScrollSubHandler = (target) => {
+    // setting initial value to true
+    const [scroll, setScroll] = useState(false)
+    // running on mount
+
+    useEffect(() => {
+      const onScroll = () => {
+        const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight / 2;
+
+        // const length = target.current.getBoundingClientRect().bottom / 2;
+        // const scrollCheck = window.scrollY < length;
+        const scrollCheck = bottom;
+        if (scrollCheck !== scroll) {
+          setScroll(scrollCheck);
+        }
+      }
+      // setting the event handler from web API
+      document.addEventListener("scroll", onScroll, {
+        passive: true
+      });
+      return () => {
+        document.removeEventListener("scroll", onScroll)
+      }
+    }, [scroll, setScroll])
+    return scroll
+  }
+
+  const scroll = useScrollHandler(titleRef);
+  const scroll_half = useScrollSubHandler(titleRef);
+  // const scrollToBottom = useScrollHandler(titleRef);
+  var titleBg = scroll ? 'hide' : 'titleBg';
+  var logoSize = scroll_half ? 'logo_min' : 'logo';
+
+  return (
+    <section>
+
+      <div className="inVisible">{isVisible ? "IN VIEWPORT" : "NOT IN VIEWPORT"}</div>
+      <div className="section"></div>
+      <div className="section"></div>
+      <div className="box" ref={containerRef}>Observe me</div>
+
+
+      <div ref={logoRef} className={logoSize}>
+        <Logo />
+      </div>
+      <div
+        className='titleBg'
+        ref={titleRef}
+        style={{
+          opacity: scroll_half ? 0 : 1,
+          display: scroll_half ? "none" : "block",
+        }}>
+
+        <div className="titleNav"  >
+          <p>Join Us:</p>
+          <a href=""><Canvas className="discordLink"><Imagemap /></Canvas></a>
+        </div>
+      </div>
+    </section>
+  )
+};
+
+// function lerp(x, y, a){
+//   return (1 - a) * x + a * y
+// }
+
 function App() {
-  const current = new Date();
-  const date = `${current.getDate()}/${
-    current.getMonth() + 1
-  }/${current.getFullYear()}`;
   return (
     <section className="main">
       <header className="elements">
-        <section className="date">{date}</section>
-
         <section>
-   
         </section>
-
         <section>
-          <Nav/>
+          {/* <Nav/> */}
+          <Title />
         </section>
       </header>
+      <main className="container" >
+        <section>
+          {/* <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 160, 160], fov: 20 }} */}
+          <Canvas shadows dpr={[1, 2]}
+            style={{
+              display: "block",
+              height: "100vh",
+              width: "100vw",
+              position: 'relative',
+              // zIndex:"1",
+              backgroundColor: "#000",
+            }}>
 
-      <main className="container">
+            <fog attach="fog" args={['#17174b', 30, 100]} />
+            <Suspense fallback={null}>
+              <ambientLight intensity={0.5} />
+              {/* <Model modelPath={"./spaceship.glb"} scale="1" position="0,0,0"/> */}
+              <spotLight position={[50, 50, -30]} castShadow />
+              <pointLight position={[-10, -10, -10]} color="" intensity={0.8} />
+              <pointLight position={[0, -5, 5]} intensity={0.5} />
+              <directionalLight position={[0, -5, 0]} color="blue" intensity={0.1} />
+              <Light />
+              <Environment preset="warehouse" />
+              <Rig />
+              {/* <Model modelPath={"https://thinkuldeep.com/modelviewer/Astronaut.glb"} /> */}
+              <Stage intensity={1.0} shadows={{ type: 'accumulative', colorBlend: 2, opacity: 1 }} >
+                <Model modelPath={"./spaceship.glb"} />
+              </Stage>
+
+            </Suspense>
+            {/* <OrbitControls makeDefault /> */}
+            <ScrollControls
+              pages={2.25} // Each page takes 100% of the height of the canvas
+              distance={1} // A factor that increases scroll bar travel (default: 1)
+              damping={2} // Friction, higher is faster (default: 4)
+              horizontal={false} // Can also scroll horizontally (default: false)
+              infinite={false} // Can also scroll infinitely (default: false)
+            >
+              <Scroll>
+                <ambientLight />
+                <LatheScene />
+                <Stars
+                  radius={100}
+                  depth={50}
+                  count={5000}
+                  factor={4}
+                  saturation={0}
+                  fade
+                  speed={1}
+                />
+              </Scroll>
+              <Scroll html className="wide" id="mission">
+                <h1 style={{ color: "white" }}>
+                  {" "}
+                  MISSION
+                  <br />
+                  MISSION
+                  <br />
+                  MISSION{" "}
+                </h1>
+                <h2 style={{ color: "white" }}>
+                  Innovate as a community to shape the world of web3.0 and beyond
+                </h2>
+              </Scroll>
+            </ScrollControls>
+          </Canvas>
+        </section>
+      </main >
+      <main className="featured" id="profiles">
         <section>
           <h1>
-            CREATIVE <br /> CHORDS
+            FEATURED <br /> CREATIVE
           </h1>
+          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={true}>
+
+            <div>
+              <Member bkname="DPM"
+                imageSrc='./images/DPM.png'
+                imageSrcAlt='DPM'
+                nameMain='DPM'
+                introDescription='Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
+                company='AKQA'
+                website=''
+                instagram=''
+                twitter=''
+                linkedin=''
+              />
+            </div>
+
+            <div>
+              <Member bkname="Nikola"
+                imageSrc='./images/Nikolaibibo.png'
+                imageSrcAlt='Nikolaibibo'
+                nameMain='Nikolaibibo'
+                introDescription='innovation FTW'
+                company='Google'
+                website=''
+                instagram=''
+                twitter=''
+                linkedin=''
+              />
+            </div>
+
+            <div>
+              <Member bkname="YOSHI"
+                imageSrc='./images/YOSHI.png'
+                imageSrcAlt='Yoshi'
+                nameMain='Yoshi'
+                introDescription='test'
+                company='test'
+                website='https://www.yoshitsugukosaka.com'
+                instagram=''
+                twitter=''
+                linkedin=''
+              />
+            </div>
+
+          </Carousel>
         </section>
+      </main>
+      {/* <footer id='joinus'>
         <Canvas
+          gl={{ alpha: true }}
+          camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
           style={{
+            backgroundColor: "black",
             display: "block",
-            height: "100vh",
-            width: "100vw",
-            backgroundColor: "#000",
+            // position: "relative",
+            // height: "100vh",
+            // width: "100vw",
           }}
         >
-          <ScrollControls
-            pages={1.1} // Each page takes 100% of the height of the canvas
-            distance={1} // A factor that increases scroll bar travel (default: 1)
+        <ScrollControls
+            pages={1.0} // Each page takes 100% of the height of the canvas
+            distance={2} // A factor that increases scroll bar travel (default: 1)
             damping={4} // Friction, higher is faster (default: 4)
             horizontal={false} // Can also scroll horizontally (default: false)
             infinite={false} // Can also scroll infinitely (default: false)
           >
             <Scroll>
-              <ambientLight />
-              <LatheScene />
-              <Stars
-                radius={100}
-                depth={50}
-                count={5000}
-                factor={4}
-                saturation={0}
-                fade
-                speed={1}
-              />
-            </Scroll>
-            <Scroll html className="wide">
-              <h1 style={{ color: "white" }}>
-                {" "}
-                MISSION
-                <br />
-                MISSION
-                <br />
-                MISSION{" "}
-              </h1>
-              <h2 style={{ color: "white" }}>
-                {" "}
-                Innovate as a community to shape the world of web3.0 and beyond
-              </h2>
-            </Scroll>
-          </ScrollControls>
-        </Canvas>
-      </main>
-      <main className="featured">
-        <section>
-          <h1>
-            FEATURED <br /> CREATIVE
-          </h1>
-
-          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={false}>
-          
-          <div>
-            <Member bkname="DPM" 
-            imageSrc = './images/DPM.png'
-            imageSrcAlt ='DPM'
-            nameMain = 'DPM'
-            introDescription = 'Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
-            company = 'AKQA'
-             />
-           </div> 
-
-           <div>
-            <Member bkname="Nikola" 
-            imageSrc = './images/Nikolaibibo.png'
-            imageSrcAlt ='Nikolaibibo'
-            nameMain = 'Nikolaibibo'
-            introDescription = 'innovation FTW'
-            company = 'Google'
-             />
-           </div> 
-
-
-          </Carousel>
-        </section>
-      </main>
-      <footer>
-        <Canvas
-        
-          gl={{ alpha: true }}
-          camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
-          jkhjhm
-          style={{
-            backgroundColor: "black",
-            display: "block",
-            height: "50vh",
-            width: "100vw",
-          }}
-        >
-        
           <ambientLight />
           <Effects multisamping={8} >
-      
-      {/* <bloomPass  /> */}
       <glitchPass attachArray="passes" />
     </Effects>
-          {/* <OrbitControls /> */}
           <gridHelper
             rotation={[0.8, 1.58, 2.26]}
             args={[160, 150, 20, "white"]}
@@ -207,10 +377,19 @@ function App() {
             args={[160, 50, 20, "white"]}
             position={[0, -20, -2]}
           />
+         
+          </Scroll>
+        </ScrollControls>
         </Canvas>
-      </footer>
-    </section>
+      </footer> */}
+    </section >
   );
 }
 
 export default App;
+
+
+
+
+
+
