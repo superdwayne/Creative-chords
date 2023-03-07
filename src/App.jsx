@@ -57,7 +57,7 @@ function App() {
             imageSrc = './images/DPM.png'
             imageSrcAlt ='DPM'
             nameMain = 'DPM'
-            introDescription = 'A Creative Technologist with skills in Unity is a professional who has an in-depth understanding of both creative and technical disciplines. They are a versatile problem-solver who can navigate the intersection of art and technology to create innovative solutions that engage and captivate audiences.'
+            introDescription = 'A Creative Technologist with skills in Unity is a professional who has an in-depth understanding of both creative'
             company = 'AKQA'
              />
            </div> 
@@ -76,19 +76,14 @@ function App() {
           </Carousel>
         </section>
       </main>
-      {/* <footer>
-        <Canvas
-          gl={{ alpha: true }}
-          camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
-          style={{
-            backgroundColor: "black",
+      <footer style={{
             display: "block",
-            height: "50vh",
+            height: "20vh",
             width: "100vw",
-          }}
-        >
-        </Canvas>
-      </footer> */}
+            backgroundColor: "#000",
+          }}>
+      
+      </footer>
     </section>
   );
 }
