@@ -1,77 +1,13 @@
+import logo from './logo.svg'
 import React, { useRef, useState, Suspense } from "react";
 import * as THREE from "three";
 import Member from './components/Section/Member'
 import { Nav, DarkMode } from './components/Top/Nav'
-import {
-  Canvas,
-  useFrame,
-  useThree,
-  useLoader,
-  extend,
-} from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 
-import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
-import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
-
-import {
-  Scroll,
-  ScrollControls,
-  Stars,
-  Lathe,
-  OrbitControls,
-  Effects,
-  Image
-} from "@react-three/drei";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./App.css";
-extend({GlitchPass, BloomPass });
-
-function Box(props) {
-  // This reference will give us direct access to the mesh
-  const mesh = useRef()
-
-  return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={[0.5, 0.1, 0,1]}
-      >
-      <boxGeometry args={[10, 0.5, 0]} />
-      <meshStandardMaterial color="orange"   />
-    </mesh>
-  )
-}
-
-function Imagemap() {
-  const ref = useRef()
-  useFrame(() => {
-    ref.current.material.zoom = 1 // 1 and higher
-    ref.current.material.grayscale = 0 // between 0 and 1
-    ref.current.material.color.set(0x7289da) // mix-in color
-  })
-  return <Image ref={ref} position={[0,-5,0]} scale={20} transparent url="./images/icon_clyde_white_RGB.png" />
-}
-
-
-
-
-function LatheScene() {
-  const points = React.useMemo(() => {
-    const points = [THREE.Vector2];
-    for (let i = 0; i < 10; i++) {
-      points.push(new THREE.Vector2(Math.sin(i * 0.2) * 10 + 5, (i - 5) * 2));
-    }
-
-    return points;
-  }, []);
-
-  return (
-    <Lathe args={[points]} rotation={[-0.2, 0.7, 1.5]} scale={[0.9, 6, 0.9]}>
-      <meshStandardMaterial color="white" wireframe />
-    </Lathe>
-  );
-}
 
 function App() {
   const current = new Date();
@@ -81,67 +17,32 @@ function App() {
   return (
     <section className="main">
       <header className="elements">
-        <section className="date">{date}</section>
-
-        <section>
-   
-        </section>
-
-        <section>
-          <Nav/>
-        </section>
+      
+      
+          <img src={logo} className="App-logo" alt="Chords" /> 
+          <h1>Creative Chords</h1>
+          <section className='join'>
+          <h1>Join us</h1>
+          </section>
       </header>
 
       <main className="container">
-        <section>
-          <h1>
-            CREATIVE <br /> CHORDS
-          </h1>
-        </section>
-        <Canvas
+
+        <main className="intro"
           style={{
             display: "block",
-            height: "100vh",
+            height: "60vh",
             width: "100vw",
             backgroundColor: "#000",
           }}
         >
-          <ScrollControls
-            pages={1.1} // Each page takes 100% of the height of the canvas
-            distance={1} // A factor that increases scroll bar travel (default: 1)
-            damping={4} // Friction, higher is faster (default: 4)
-            horizontal={false} // Can also scroll horizontally (default: false)
-            infinite={false} // Can also scroll infinitely (default: false)
-          >
-            <Scroll>
-              <ambientLight />
-              <LatheScene />
-              <Stars
-                radius={100}
-                depth={50}
-                count={5000}
-                factor={4}
-                saturation={0}
-                fade
-                speed={1}
-              />
-            </Scroll>
-            <Scroll html className="wide">
-              <h1 style={{ color: "white" }}>
-                {" "}
-                MISSION
-                <br />
-                MISSION
-                <br />
-                MISSION{" "}
-              </h1>
-              <h2 style={{ color: "white" }}>
-                {" "}
-                Innovate as a community to shape the world of web3.0 and beyond
-              </h2>
-            </Scroll>
-          </ScrollControls>
-        </Canvas>
+        <h1>
+            CREATIVE <br /> CHORDS
+          </h1>
+        <h3>
+        Creative Chords is an index of talented and innovative Creative Technologists <br /> from around the world - your ultimate guide to the world of Creative Technology!        </h3>
+        
+        </main>
       </main>
       <main className="featured">
         <section>
@@ -156,7 +57,7 @@ function App() {
             imageSrc = './images/DPM.png'
             imageSrcAlt ='DPM'
             nameMain = 'DPM'
-            introDescription = 'Just a dreamer and a realist, I curate experiences I push boundaries, I am always thinking, always learning and always up for a challange.'
+            introDescription = 'A Creative Technologist with skills in Unity is a professional who has an in-depth understanding of both creative and technical disciplines. They are a versatile problem-solver who can navigate the intersection of art and technology to create innovative solutions that engage and captivate audiences.'
             company = 'AKQA'
              />
            </div> 
@@ -175,12 +76,10 @@ function App() {
           </Carousel>
         </section>
       </main>
-      <footer>
+      {/* <footer>
         <Canvas
-        
           gl={{ alpha: true }}
           camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 0, 40]}}
-          jkhjhm
           style={{
             backgroundColor: "black",
             display: "block",
@@ -188,27 +87,8 @@ function App() {
             width: "100vw",
           }}
         >
-        
-          <ambientLight />
-          <Effects multisamping={8} >
-      
-      {/* <bloomPass  /> */}
-      <glitchPass attachArray="passes" />
-    </Effects>
-          {/* <OrbitControls /> */}
-          <gridHelper
-            rotation={[0.8, 1.58, 2.26]}
-            args={[160, 150, 20, "white"]}
-            position={[1, 0, -2]}
-          />
-         <Imagemap/>
-         <gridHelper
-            rotation={[0.8, 1.58, 2.5]}
-            args={[160, 50, 20, "white"]}
-            position={[0, -20, -2]}
-          />
         </Canvas>
-      </footer>
+      </footer> */}
     </section>
   );
 }
