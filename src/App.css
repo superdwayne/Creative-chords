@@ -1,5 +1,31 @@
-.main {
+.carousel.carousel-slider .control-arrow {
   
+  padding: 50px !important;
+}
+
+.social {
+  display: flex;
+  margin: 0px auto;
+  justify-content: space-around;
+}
+
+.social,  img  {
+  width: 100px !important;
+  padding-top: 10px !important;
+}
+
+.nav h1 a {
+  color: #fff !important;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.join h1 {
+  padding: 50px;
+}
+
+.main {
+
   align-items: center;
   justify-content: center;
   background-color: #000;
@@ -67,6 +93,8 @@ small {
     text-align: center;
   }
 
+
+  
   .Creative_name_bk {
     display: inline;
     justify-content: center;
@@ -116,7 +144,7 @@ small {
 }
 
 .Creative {
-  height: 100vh;
+  height: 120vh;
 }
 
 .Creative_name_bk {

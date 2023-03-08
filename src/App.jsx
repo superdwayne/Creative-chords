@@ -2,7 +2,7 @@ import logo from './logo.svg'
 import React, { useRef, useState, Suspense } from "react";
 import * as THREE from "three";
 import Member from './components/Section/Member'
-import { Nav, DarkMode } from './components/Top/Nav'
+import Nav from './components/Top/Nav'
 import { Canvas } from "@react-three/fiber";
 
 import { Carousel } from "react-responsive-carousel";
@@ -17,10 +17,9 @@ function App() {
   return (
     <section className="main">
       <header className="elements">
-      
-      
           <img src={logo} className="App-logo" alt="Chords" /> 
           <h1>Creative Chords</h1>
+          <Nav />
           <section className='join'>
           <h1>Join us</h1>
           </section>
@@ -57,7 +56,7 @@ function App() {
             imageSrc = './images/DPM.png'
             imageSrcAlt ='DPM'
             nameMain = 'DPM'
-            introDescription = 'A Creative Technologist with skills in Unity is a professional who has an in-depth understanding of both creative'
+            introDescription = 'A Creative Technologist is a professional who combines a deep understanding of technology with a creative mindset to develop innovative solutions to complex problems. They are skilled in using technology to create unique and engaging user experiences, often working on projects that involve web and mobile applications, interactive installations'
             company = 'AKQA'
              />
            </div> 
@@ -76,14 +75,7 @@ function App() {
           </Carousel>
         </section>
       </main>
-      <footer style={{
-            display: "block",
-            height: "20vh",
-            width: "100vw",
-            backgroundColor: "#000",
-          }}>
-      
-      </footer>
+     
     </section>
   );
 }
