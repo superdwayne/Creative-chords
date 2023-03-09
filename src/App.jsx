@@ -58,6 +58,9 @@ function App() {
             nameMain = 'DPM'
             introDescription = 'A Creative Technologist is a professional who combines a deep understanding of technology with a creative mindset to develop innovative solutions to complex problems. They are skilled in using technology to create unique and engaging user experiences, often working on projects that involve web and mobile applications, interactive installations'
             company = 'AKQA'
+            instagram = 'https://www.instagram.com/ddpmarshall/'
+            linkedin = 'https://www.linkedin.com/in/ddpmarshall/'
+            twitter = 'https://twitter.com/DDP_Marshall'
              />
            </div> 
 
@@ -68,6 +71,19 @@ function App() {
             nameMain = 'Nikolaibibo'
             introDescription = 'innovation FTW'
             company = 'Google'
+             />
+           </div> 
+           <div>
+            <Member bkname="YOSHI" 
+            imageSrc = './images/YOSHI.png'
+            imageSrcAlt ='Yoshi'
+            nameMain = 'Yoshi'
+            introDescription = 'test'
+            company = 'test'
+            website = 'https://www.yoshitsugukosaka.com'
+            instagram = ''
+            twitter = ''
+            linkedin = ''
              />
            </div> 
 

@@ -32,10 +32,19 @@ function Members(props) {
           <small>{props.company}</small>
           <section className="social">
             <section>
-              <img src="https://www.edigitalagency.com.au/wp-content/uploads/new-Instagram-logo-white-glyph.png"  alt="insta" />
+              <a href={props.instagram} target="_blank">
+              <img src="/images/insta.png"  alt="insta" />
+              </a>
               </section>
               <section>
-              <img src="https://www.edigitalagency.com.au/wp-content/uploads/new-Instagram-logo-white-glyph.png"  alt="insta" />
+                <a href={props.linkedin} target="_blank">
+                  <img src="/images/in.png"  alt="Linked-in" />
+                </a>
+              </section>
+              <section>
+                <a href={props.twitter} target="_blank">
+                  <img src="/images/tw.png"  alt="Twitter" />
+                </a>
               </section>
           </section>
           <p>{props.introDescription}</p>
