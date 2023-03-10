@@ -16,7 +16,7 @@ import {
          </Routes>
        
            <nav className='nav'>
-             {/* <h1><Link to="/about">About</Link> </h1> */}
+             <h1><Link to="/about">About</Link> </h1>
            </nav>
    </Router>  
       

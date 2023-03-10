@@ -3,6 +3,10 @@
   padding: 50px !important;
 }
 
+.App-logo {
+  width: 100px !important;
+}
+
 .social {
   display: flex;
   margin: 0px auto;
@@ -10,9 +14,10 @@
 }
 
 .social,  img  {
-  width: 150px !important;
+  width: 220px !important;
     padding-top: 10px !important;
     align-items: center;
+    cursor: pointer;
 }
 
 .nav h1 a {
@@ -134,14 +139,16 @@ small {
 .featured h1  {
   font-family: Akira;
   font-size: 100px;
-  text-align: center;
+  text-align: left;
   color: #fff;
   padding-top: 10vh;
   margin: 0px;
   padding-bottom: 10vh;
+  padding: 150px;
 }
 .featured {
   background-color: #000;
+  /* padding: 150px; */
 }
 
 .Creative {
