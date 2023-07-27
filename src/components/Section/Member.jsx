@@ -1,6 +1,7 @@
 import React from "react";
 function Members(props) {
   return (
+    /* Write logic to select a random creative */
     <>
       <section className="Creative">
         <section className="Creative_name_wrapper">

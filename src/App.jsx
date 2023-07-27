@@ -1,92 +1,105 @@
-import logo from './logo.svg'
-import React from "react";
-import Member from './components/Section/Member'
-import MemberLoop from './components/Section/Membersloop'
-import Nav from './components/Top/Nav'
+// App.js
 
-import { Carousel } from "react-responsive-carousel";
+import logo from "./logo.svg";
+import React, { useState, useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
+
+import Nav from "./components/Top/Nav";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./App.css";
+import SignIn from "./signin";
+import AuthContext from "./Authcontext";
+import Onboarding from "./components/users/onboarding";
+import Edit from "./components/users/edit";
+import SeachResults from "./components/search/search";
+import Featuredcreative from "./components/featuredCreative/featuredCreative";
+import About from "./components/about/about"; // import About component
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) { 
+    return <div className="main container loading"> <h1> Loading...</h1></div>;
+  }
+  
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+    
+      <Router>
+      <header className="elements">
+      <Link to="/">
+        <img src={logo} className="App-logo" alt="Chords" />
+        </Link> 
+        <Nav />
+      </header>
+        <Routes>
+          <Route path="/about" element={<About />} />
+          <Route path="/*" element={<MainLayout />} />
+        </Routes>
+      </Router>
+    </AuthContext.Provider>
+  );
+}
+
+function MainLayout() {
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
+
   return (
     <section className="main">
-      <header className="elements">
-          <img src={logo} className="App-logo" alt="Chords" /> 
-          <h1>Creative Chords</h1>
-          <Nav />
-          <section className='join'>
-          <h1>Join us</h1>
-          </section>
-      </header>
+      
 
-      <main className="container">
+      {location.pathname !== "/about" && (
+        <>
+          <main className="container">
+            <main className="intro"
+              style={{
+                display: "block",
+                height: "60vh",
+                width: "100vw",
+                backgroundColor: "#000",
+              }}
+            >
+              {user ? (
+                <Onboarding />
+              ) : (
+                <h1>
+                  CREATIVE <br /> CHORDS
+                </h1>
+              )}
 
-        <main className="intro"
-          style={{
-            display: "block",
-            height: "60vh",
-            width: "100vw",
-            backgroundColor: "#000",
-          }}
-        >
-        <h1>
-            CREATIVE <br /> CHORDS
-          </h1>
-        <h3>
-        Creative Chords is an index of talented and innovative Creative Technologists <br /> from around the world - your ultimate guide to the world of Creative Technology!        </h3>
-        
-        </main>
-      </main>
-      <main className="featured">
-        <section>
-          <h1>
-            FEATURED <br /> CREATIVE
-          </h1>
+              {user ? null : <><h3>
+                Creative Chords is an index of talented and innovative Creative Technologists from around the world. 
+                <br />From interactive design to digital artistry, we cover the spectrum of tech-driven creativity - your ultimate guide to the world of Creative Technology!
+              </h3><SignIn name="Create a profile" /></>  }
+            </main>
+          </main>
 
-          <Carousel showThumbs={false} emulateTouch={true} infiniteLoop={true} showIndicators={false} showStatus={false} swipeable={false}>
-          
-          <div>
-            <Member bkname="DPM" 
-            imageSrc = './images/DPM.png'
-            imageSrcAlt ='DPM'
-            nameMain = 'DPM'
-            introDescription = 'A Creative Technologist is a professional who combines a deep understanding of technology with a creative mindset to develop innovative solutions to complex problems. They are skilled in using technology to create unique and engaging user experiences, often working on projects that involve web and mobile applications, interactive installations'
-            company = 'AKQA'
-            instagram = 'https://www.instagram.com/ddpmarshall/'
-            linkedin = 'https://www.linkedin.com/in/ddpmarshall/'
-            twitter = 'https://twitter.com/DDP_Marshall'
-             />
-           </div> 
+          <div className="main-container">
+            {user ? null : <SeachResults />}
 
-           <div>
-            <Member bkname="Nikola" 
-            imageSrc = './images/Nikolaibibo.png'
-            imageSrcAlt ='Nikolaibibo'
-            nameMain = 'Nikolaibibo'
-            introDescription = 'innovation FTW'
-            company = 'Google'
-             />
-           </div> 
-           <div>
-            <Member bkname="YOSHI" 
-            imageSrc = './images/YOSHI.png'
-            imageSrcAlt ='Yoshi'
-            nameMain = 'Yoshi'
-            introDescription = 'test'
-            company = 'test'
-            website = 'https://www.yoshitsugukosaka.com'
-            instagram = ''
-            twitter = ''
-            linkedin = ''
-             />
-           </div> 
-
-
-          </Carousel>
-        </section>
-      </main>
-     
+            <main className="featured">
+              {user ? null : <Featuredcreative />}
+            </main>
+          </div>
+        </>
+      )}
     </section>
   );
 }
