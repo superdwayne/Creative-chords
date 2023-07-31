@@ -5,11 +5,7 @@ function Members(props) {
     <>
       <section className="Creative">
         <section className="Creative_name_wrapper">
-          <div className="Creative_name_bk">
-            <h3>{props.bkname}</h3>
-            <h3>{props.bkname}</h3>
-            <h3>{props.bkname}</h3>
-          </div>
+          
           <div className="Creative_name_bk">
             <h3>{props.bkname}</h3>
             <h3>{props.bkname}</h3>
@@ -31,6 +27,7 @@ function Members(props) {
           <h1 className="Creative_name">{props.nameMain}</h1>
           
           <small>{props.company}</small>
+          <p>{props.introDescription}</p>
           <section className="social">
             <section>
               <a href={props.instagram} target="_blank">
@@ -48,7 +45,7 @@ function Members(props) {
                 </a>
               </section>
           </section>
-          <p>{props.introDescription}</p>
+          
         </div>
       </section>
     </>

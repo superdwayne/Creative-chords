@@ -1,12 +1,12 @@
-// Nav.js
-
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AuthContext from '../../Authcontext';
 import { auth } from '../../firebase';
+import SignIn from '../../signin';
 
 const Nav = () => {
   const { user } = useContext(AuthContext);
+  const location = useLocation();
 
   const handleSignOut = () => {
     auth.signOut().then(() => {
@@ -16,19 +16,24 @@ const Nav = () => {
     });
   };
 
+  const isHomePage = location.pathname === '/';
+
   return (
     <>
       <nav className='nav'>
-        <h1><Link to="/about">About</Link></h1>
+        <h1><Link className='about' to="/about">About</Link></h1>
+        <h1><Link className='about' hidden to="/admin">admin</Link></h1>
       </nav>
 
-      <section className="join">
-        {user ? (
+      {isHomePage && (
+        <section className="join">
+          {user ? (
             <button onClick={handleSignOut}>Sign out</button>
-        ) : (
-            null
-        )}
-      </section>
+          ) : (
+            <SignIn name="Sign in" />
+          )}
+        </section>
+      )}
     </>
   );
 };
