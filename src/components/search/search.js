@@ -30,6 +30,8 @@ export default function Search() {
   console.log('Search term:', searchTerm);
   console.log('Filtered users:', filteredUsers);
 
+
+
   return (
     <>
       {loading ? (
@@ -68,12 +70,12 @@ export default function Search() {
                       </a>
                     )}
                     {user.twitter && (
-                      <a href={user.twitter} target="_blank" rel="noreferrer">
+                      <a href={`https://twitter.com/${user.twitter}`}  target="_blank" rel="noreferrer">
                         <img className='indexsocial' src="/images/tw.png" alt="Twitter" />
                       </a>
                     )}
                     {user.instagram && (
-                      <a href={user.instagram} target="_blank" rel="noreferrer">
+                      <a href={`https://www.instagram.com/${user.instagram}`} target="_blank" rel="noreferrer">
                         <img className='indexsocial' src="/images/insta.png" alt="Instagram" />
                       </a>
                     )}

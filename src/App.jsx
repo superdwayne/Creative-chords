@@ -1,5 +1,3 @@
-// App.js
-
 import logo from "./logo.svg";
 import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -89,7 +87,7 @@ function MainLayout() {
               {user ? null : <><h3>
                 Creative Chords is an index of talented and innovative Creative Technologists from around the world. 
                 <br />From interactive design to digital artistry, we cover the spectrum of tech-driven creativity - your ultimate guide to the world of Creative Technology!
-              </h3><SignIn name="Create a profile" /></>  }
+              </h3></>  }
             </main>
           </main>
 

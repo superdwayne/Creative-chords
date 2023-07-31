@@ -30,7 +30,7 @@ const Nav = () => {
           {user ? (
             <button onClick={handleSignOut}>Sign out</button>
           ) : (
-            <SignIn name="Sign in" />
+            <SignIn name="Create a profile" />
           )}
         </section>
       )}

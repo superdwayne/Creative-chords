@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs, doc, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import SignIn from '../../signin';
 
 const AddUser = () => {
   const [name, setName] = useState('');
-  const [company, setCompany] = useState(''); // new state variable for company
+  const [company, setCompany] = useState('');
   const [skills, setSkills] = useState([{ skill: '' }]);
   const [instagram, setInstagram] = useState('');
   const [twitter, setTwitter] = useState('');
@@ -14,8 +14,9 @@ const AddUser = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [step, setStep] = useState(1);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [featured, setFeatured] = useState(false); // New state for Featured Creative choice
-  const [photo, setPhoto] = useState(null); // New state for uploaded photo
+  const [featured, setFeatured] = useState(false);
+  const [photo, setPhoto] = useState(null);
+  const [isProfileCreated, setIsProfileCreated] = useState(false);
 
   useEffect(() => {
     if (auth.currentUser) {
@@ -23,20 +24,20 @@ const AddUser = () => {
 
       const checkExistingUser = async () => {
         const userCollection = collection(db, 'testusers');
-        const q = query(userCollection, where("name", "==", auth.currentUser.displayName));
+        const q = query(userCollection, where('name', '==', auth.currentUser.displayName));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           setName(userData.name);
-          setCompany(userData.company); // set company from Firestore data
+          setCompany(userData.company);
           setSkills(userData.skills.map(skill => ({ skill: skill })) || [{ skill: '' }]);
           setInstagram(userData.instagram);
           setTwitter(userData.twitter);
           setLinkedin(userData.linkedin);
           setAbout(userData.about);
-          setFeatured(userData.featured); // set featured from Firestore data
-          setPhoto(userData.photoURL); // set photoURL from Firestore data
+          setFeatured(userData.featured);
+          setPhoto(userData.photoURL);
           setIsUpdating(true);
         }
       };
@@ -79,23 +80,17 @@ const AddUser = () => {
     if (confirmInput === 'DELETE') {
       try {
         const userCollection = collection(db, 'testusers');
-        const q = query(userCollection, where("name", "==", name));
+        const q = query(userCollection, where('name', '==', name));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
           const docRef = doc(userCollection, querySnapshot.docs[0].id);
           await deleteDoc(docRef);
 
-          // Sign out the user
           await auth.signOut();
 
-          // Redirect to the home page or wherever you want after deletion
-          // For example, if using React Router, you can do:
-          // history.push('/home');
-          // If not using React Router, you can use window.location.href to redirect
-
           setName('');
-          setCompany(''); // reset company
+          setCompany('');
           setSkills([{ skill: '' }]);
           setInstagram('');
           setTwitter('');
@@ -109,7 +104,6 @@ const AddUser = () => {
         setAlertMessage('An error occurred while deleting the user');
       }
     } else {
-      // Show a message if the input doesn't match the confirmation
       setAlertMessage('Deletion canceled. Please type "DELETE" to confirm.');
     }
   };
@@ -117,11 +111,10 @@ const AddUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const finalSkills = skills.map(skillObj => skillObj.skill).filter(skill => skill.trim() !== ''); // Filter out empty skills
+    const finalSkills = skills.map(skillObj => skillObj.skill).filter(skill => skill.trim() !== '');
 
     try {
       if (isUpdating) {
-        // For test users, directly update their profile in the 'testusers' collection
         const userDocRef = doc(db, 'testusers', auth.currentUser.uid);
         await setDoc(userDocRef, {
           name: name,
@@ -135,7 +128,6 @@ const AddUser = () => {
           photoURL: photo,
         }, { merge: true });
       } else {
-        // For new registration requests, create a document in the 'registrationRequests' collection
         const docRef = doc(db, 'registrationRequests', auth.currentUser.uid);
         await setDoc(docRef, {
           name: name,
@@ -150,15 +142,17 @@ const AddUser = () => {
           isNewRegistration: true,
           approved: false,
         });
+
+        setIsProfileCreated(true); // Set the profile created state to true when a new profile is submitted
       }
 
-      setAlertMessage(isUpdating ? 'User updated successfully' : 'User registration request submitted successfully');
+      setAlertMessage(isUpdating ? 'User updated successfully' : null);
     } catch (e) {
       console.error('Error adding/updating document: ', e);
       setAlertMessage('An error occurred while processing the form');
     }
 
-    if (step < 5 && !isUpdating) { // Update step condition
+    if (step < 5 && !isUpdating) {
       setStep(step + 1);
     }
   };
@@ -183,7 +177,7 @@ const AddUser = () => {
                 </div>
               ))}
             </div>
-            <button type="button"  className='mb20' onClick={addSkill}>Add another skill</button>
+            <button type="button" className='mb20' onClick={addSkill}>Add another skill</button>
             <button type="button" onClick={nextStep}>Next</button>
           </>
         )}
@@ -207,13 +201,13 @@ const AddUser = () => {
             <h1>SOCIAL</h1>
             <input
               type="text"
-              placeholder="Instagram"
+              placeholder="Instagram Handle"
               value={instagram}
               onChange={(e) => setInstagram(e.target.value)}
             />
             <input
               type="text"
-              placeholder="Twitter"
+              placeholder="Twitter Handle no @"
               value={twitter}
               onChange={(e) => setTwitter(e.target.value)}
             />
@@ -270,7 +264,7 @@ const AddUser = () => {
               <h3>Name</h3>
               <p>{name}</p>
             </div>
-            {featured && ( // Conditionally render based on 'featured' state
+            {featured && (
               <div>
                 <h3>Photo</h3>
                 <img src={photo} alt={name} />
@@ -302,6 +296,16 @@ const AddUser = () => {
             {auth.currentUser ? <input type="submit" value={isUpdating ? 'Update user' : 'Submit'} /> : null}
             <button type="button" onClick={deleteUser}>Delete Profile</button>
           </>
+        )}
+
+        {isProfileCreated && (
+          <div className="overlay">
+            <div className="popup">
+              <p>Your profile will be ready within 24 hours.</p>
+              <p>If you want to speed up the process, follow us on social media.</p>
+              <button onClick={() => setIsProfileCreated(false)}>Close</button>
+            </div>
+          </div>
         )}
 
         {alertMessage && <p>{alertMessage}</p>}
