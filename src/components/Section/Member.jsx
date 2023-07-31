@@ -1,5 +1,10 @@
 import React from "react";
 function Members(props) {
+
+  const twitterHandle = props.twitter;
+
+  // Construct the full Twitter URL
+  const twitterUrl = `https://twitter.com/${twitterHandle}`;
   return (
     /* Write logic to select a random creative */
     <>
@@ -40,7 +45,7 @@ function Members(props) {
                 </a>
               </section>
               <section>
-                <a href={props.twitter} target="_blank">
+                <a href={twitterUrl} target="_blank">
                   <img src="/images/tw.png"  alt="Twitter" />
                 </a>
               </section>
