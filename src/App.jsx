@@ -16,6 +16,7 @@ import Edit from "./components/users/edit";
 import SeachResults from "./components/search/search";
 import Featuredcreative from "./components/featuredCreative/featuredCreative";
 import About from "./components/about/about"; // import About component
+import Admin from "./components/admin/admin"; // import About component
 
 function App() {
   const [user, setUser] = useState(null);
@@ -50,6 +51,7 @@ function App() {
       </header>
         <Routes>
           <Route path="/about" element={<About />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/*" element={<MainLayout />} />
         </Routes>
       </Router>
@@ -71,7 +73,7 @@ function MainLayout() {
             <main className="intro"
               style={{
                 display: "block",
-                height: "60vh",
+                height: "50vh",
                 width: "100vw",
                 backgroundColor: "#000",
               }}
@@ -80,7 +82,7 @@ function MainLayout() {
                 <Onboarding />
               ) : (
                 <h1>
-                  CREATIVE <br /> CHORDS
+                  CREATIVE CHORDS
                 </h1>
               )}
 
@@ -97,6 +99,7 @@ function MainLayout() {
             <main className="featured">
               {user ? null : <Featuredcreative />}
             </main>
+            
           </div>
         </>
       )}
