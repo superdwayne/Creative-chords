@@ -43,10 +43,14 @@ const AdminDashboard = () => {
             await setDoc(doc(testUsersCollection, selectedUserId), {
               ...requestData,
               isNewRegistration: true, // Set the isNewRegistration field to true for new registrations
+              approved: true, // Set the approved field to true for approved profiles
             });
           } else {
             // Update the existing document in 'testusers' collection for profile updates
-            await setDoc(testUsersDocRef, requestData, { merge: true });
+            await setDoc(testUsersDocRef, {
+              ...requestData,
+              approved: true, // Set the approved field to true for approved profiles
+            }, { merge: true });
           }
 
           // Delete the registration request from 'registrationRequests' collection
@@ -85,14 +89,18 @@ const AdminDashboard = () => {
 
   return (
     <section className="main">
-      <div className='container'>
+      <div className='container-admin'>
         <h1>Admin Dashboard</h1>
+        <section className='user-details'>
         {pendingRegistrationRequests.length > 0 ? (
           <ul>
             {pendingRegistrationRequests.map(request => (
               <li key={request.id}>
+              <img src={request.photoURL} alt={request.name} />
                 <p>Name: {request.name}</p>
                 <p>Company: {request.company}</p>
+                <p>Skills: {request.skills}</p>
+                <p>Bio: {request.about}</p>
                 <button onClick={() => approveUser(request.id)}>Approve</button>
                 <button onClick={() => rejectUser(request.id)}>Reject</button>
               </li>
@@ -101,6 +109,7 @@ const AdminDashboard = () => {
         ) : (
           <p>No pending registration requests.</p>
         )}
+        </section>
 
         {/* Confirmation modal */}
         {selectedUserId && (
