@@ -10,15 +10,17 @@
   width: 40px !important
 }
 
-.social {
-  display: flex;
-  margin: 0px auto;
-  justify-content: space-around;
-}
 
 .pending, .social {
   margin: 0px !important;
 }
+
+.social {
+  display: flex;
+  margin: 0px auto !important;
+  justify-content: space-around;
+}
+
 
 body {
   background-color: #000; /* Black color code */
