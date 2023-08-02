@@ -59,7 +59,7 @@ export default function Search() {
                   <div className="row-item">{user.company}</div>
 
                   <div className="row-item">
-                    <p style={{ padding: 5, backgroundColor: '#ff00ff' }}>
+                    <p style={{ padding: 5, backgroundColor: index % 2 === 0 ? '#000' : '#000', }}>
                       {user.skills && user.skills.length > 0 ? user.skills.join(', ') : 'No skills'}
                     </p>
                   </div>
