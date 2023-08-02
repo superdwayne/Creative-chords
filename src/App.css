@@ -219,7 +219,7 @@ ul {
 }
 
 .Creative {
-  height: 120vh;
+  height: 105vh;
 }
 
 .Creative_name_bk {
@@ -460,8 +460,9 @@ padding: 5px;
   }
 
   h1 {
-    font-size: 30px !important;
+    font-size: 20px !important;
     text-align: center;
+    padding: 0px !important
   }
   h2 {
     font-size: 30px !important;
@@ -472,7 +473,12 @@ padding: 5px;
     text-align: center;
   }
 
-
+  .Creative_name {
+    font-size: 25px !important;
+    text-align: center;
+    margin:  30px auto !important;
+    padding: 0px 100px  !important;
+  }
   
   .Creative_name_bk {
     display: inline;
@@ -490,12 +496,17 @@ padding: 5px;
   .Creative img 
 {
   
-  width: 90% !important;
+  width: 60% !important;
+  padding-top: 35px !important;
 
 }
 
+.social a img {
+  width: 20% !important;
+}
+
 .Creative {
-  height: 50vh !important;
+  height: 70vh !important;
 }
 
   .Creative_profile {
@@ -503,10 +514,18 @@ padding: 5px;
   }
 
   .featured h1 {
-    text-align: left  !important;
+    text-align: center  !important;
   }
   .featured {
     padding:  0px !important;
+  }
+
+  .intro {
+    height: 30vh !important;
+  }
+
+  .Creative_profile p {
+    width: 100% !important;
   }
 
 }

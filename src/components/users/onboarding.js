@@ -123,7 +123,7 @@ const AddUser = () => {
           setLinkedin('');
           setAbout('');
 
-          setAlertMessage('User deleted successfully');
+          setAlertMessage('<h1>User deleted successfully</h1>');
         }
       } catch (e) {
         console.error('Error deleting document: ', e);
