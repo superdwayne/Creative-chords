@@ -26,6 +26,11 @@ const AddUser = () => {
   useEffect(() => {
     if (auth.currentUser) {
       setName(auth.currentUser.displayName);
+
+      const googlePhotoURL = auth.currentUser.photoURL;
+    if (googlePhotoURL) {
+      setPhoto(googlePhotoURL);
+    }
   
       const checkExistingUser = async () => {
         setLoading(false);
@@ -198,7 +203,7 @@ const AddUser = () => {
           {step === 1 && (
             <>
               <h1>NAME</h1>
-              <input type="text" value={name} readOnly />
+              <input type="text" value={name}  onChange={(e) => setName(e.target.value)}  />
               <h1>SKILLS</h1>
               <div className="skills-grid">
                 {skills.map((skillObj, index) => (
@@ -270,13 +275,19 @@ const AddUser = () => {
               </label>
               {featured && (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Image URL"
-                    value={photo}
-                    onChange={(e) => setPhoto(e.target.value)}
-                  />
-                  <img src={photo} alt="" />
+                <div>
+          <h3>Current Featured Image:</h3>
+          <img src={photo} alt="" />
+        </div>
+        <label>
+          <span>Use a different image URL:</span>
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={photo}
+            onChange={(e) => setPhoto(e.target.value)}
+          />
+        </label>
                   <h1>BIO</h1>
                   <input
                     type="text"
