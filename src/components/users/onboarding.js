@@ -35,7 +35,7 @@ const AddUser = () => {
       const checkExistingUser = async () => {
         setLoading(false);
         const userCollection = collection(db, 'testusers');
-        let q = query(userCollection, where('name', '==', auth.currentUser.displayName));
+        let q = query(userCollection, where('uid', '==', auth.currentUser.uid)); // CHANGE HERE
         let querySnapshot = await getDocs(q);
   
         if (!querySnapshot.empty) {
@@ -56,7 +56,7 @@ const AddUser = () => {
         } else {
           // Check in 'registrationRequests' if the profile is not found in 'testusers'
           const registrationRequestsCollection = collection(db, 'registrationRequests');
-          q = query(registrationRequestsCollection, where('name', '==', auth.currentUser.displayName));
+          q = query(registrationRequestsCollection, where('uid', '==', auth.currentUser.uid)); // CHANGE HERE
           querySnapshot = await getDocs(q);
   
           if (!querySnapshot.empty) {
@@ -158,6 +158,7 @@ const AddUser = () => {
           about: about,
           featured: featured,
           photoURL: photo,
+          uid: auth.currentUser.uid, // CHANGE HERE
         }, { merge: true });
 
         setAlertMessage('User updated successfully');
@@ -174,6 +175,7 @@ const AddUser = () => {
           about: about,
           featured: featured,
           photoURL: photo,
+          uid: auth.currentUser.uid, // CHANGE HERE
           isNewRegistration: true,
           approved: false,
         });
