@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { collection, query, where, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import SignIn from '../../signin';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import LinearProgress from '@mui/material/LinearProgress';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, useGLTF, Html } from '@react-three/drei';
+import { MeshStandardMaterial, Color, BoxGeometry } from 'three';
+
 
 const AddUser = () => {
   const [name, setName] = useState('');
@@ -19,9 +26,15 @@ const AddUser = () => {
   const [isProfileCreated, setIsProfileCreated] = useState(false);
   const [isApproved, setIsApproved] = useState(false); // New state variable for profile approval status
   const [loading, setLoading] = useState(true);
+  const [hasProfile, setHasProfile] = useState(false);  // create state for hasProfile
+  const [isEditing, setIsEditing] = useState(false); // Add this line
 
   console.log("Profile approved:" + isApproved)
   console.log("Profile created:" + isProfileCreated)
+
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+  };
 
   useEffect(() => {
     if (auth.currentUser) {
@@ -74,7 +87,7 @@ const AddUser = () => {
   }, []);
   
   if (loading) { 
-    return <div className="main container loading"> <h1> Loading...</h1></div>;
+    return <LinearProgress />;
   }
 
   const addSkill = () => {
@@ -107,19 +120,23 @@ const AddUser = () => {
 
   const deleteUser = async () => {
     const confirmInput = prompt("Type 'DELETE' to confirm deletion:");
-
+  
     if (confirmInput === 'DELETE') {
       try {
         const userCollection = collection(db, 'testusers');
-        const q = query(userCollection, where('name', '==', name));
+        let q = query(userCollection, where('uid', '==', auth.currentUser.uid)); // CHANGE HERE
         const querySnapshot = await getDocs(q);
-
+  
         if (!querySnapshot.empty) {
           const docRef = doc(userCollection, querySnapshot.docs[0].id);
           await deleteDoc(docRef);
-
+  
+          // remove hasProfile from local storage
+          localStorage.removeItem('hasProfile');
+          setHasProfile(false); // Update the hasProfile state
+  
           await auth.signOut();
-
+  
           setName('');
           setCompany('');
           setSkills([{ skill: '' }]);
@@ -127,7 +144,7 @@ const AddUser = () => {
           setTwitter('');
           setLinkedin('');
           setAbout('');
-
+  
           setAlertMessage('<h1>User deleted successfully</h1>');
         }
       } catch (e) {
@@ -138,7 +155,7 @@ const AddUser = () => {
       setAlertMessage('Deletion canceled. Please type "DELETE" to confirm.');
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -195,17 +212,32 @@ const AddUser = () => {
     }
   };
 
-  // Check if the profile is both created and not approved
-  const isProfileCreatedAndNotApproved = isProfileCreated && !isApproved;
+  
+   const renderProfileOverview = () => (
 
-  return (
     <>
-      {(isUpdating || (isProfileCreated && isApproved) || (!isProfileCreated && !isApproved)) ? (
-        <form onSubmit={handleSubmit}>
+      <div className='profile'>
+         <h1>Welcome {name} </h1>
+         <p><strong>Company:</strong> {company}</p>
+         <p><strong>Skills:</strong> {skills.map(skillObj => skillObj.skill).join(", ")}</p>
+         <p><strong>Instagram:</strong> {instagram}</p>
+         <p><strong>Twitter:</strong> {twitter}</p>
+         <p><strong>LinkedIn:</strong> {linkedin}</p>
+         <p><strong>About:</strong> {about}</p>
+         <p><strong>About:</strong> <img src={photo} /> </p>
+         <button type="button" onClick={deleteUser}>Delete Profile</button>
+         <button type="button" onClick={toggleEditing}>Update Profile</button> {/* Add this line */}
+       </div>
+     </>
+  );
+  
+  const renderUpdateForm = () => (
+<form onSubmit={handleSubmit}>
           {step === 1 && (
-            <>
+            <>  
               <h1>NAME</h1>
-              <input type="text" value={name}  onChange={(e) => setName(e.target.value)}  />
+              <TextField onChange={(e) => setName(e.target.value)} defaultValue={name} />
+              {/* <input type="text" value={name}  onChange={(e) => setName(e.target.value)}  /> */}
               <h1>SKILLS</h1>
               <div className="skills-grid">
                 {skills.map((skillObj, index) => (
@@ -214,11 +246,12 @@ const AddUser = () => {
                       type="text"
                       value={skillObj.skill}
                       onChange={(e) => updateSkill(index, e.target.value)}
-                    />
-                    <button type="button" onClick={() => removeSkill(index)}>Remove this skill</button>
+                    /> <button type="button" onClick={() => removeSkill(index)}>Remove this skill</button>
                   </div>
                 ))}
               </div>
+              {auth.currentUser && isProfileCreated ? <input type="submit" value={isUpdating ? 'Update profile' : 'Complete profile'} /> : null}
+
               <button type="button" className='mb20' onClick={addSkill}>Add another skill</button>
               <button type="button" onClick={nextStep}>Next</button>
             </>
@@ -346,7 +379,14 @@ const AddUser = () => {
             </>
           )}
         </form>
-        ) : null}
+  );
+
+  return (
+    <>
+
+       {!isEditing && isProfileCreated && isApproved  ? renderProfileOverview() : (isUpdating || (isProfileCreated && isApproved) || (!isProfileCreated && !isApproved)) ? (
+        renderUpdateForm()
+        ): null}
         
         {isProfileCreated && !isApproved ? (
         <div className='pending'>

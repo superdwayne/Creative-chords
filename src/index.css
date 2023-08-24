@@ -8,12 +8,26 @@ body {
   height:100%;
 }
 
+
+@font-face {
+  font-family: "Downey";
+  src: local("Downey"),
+   url("./fonts/DowneyOutline-Black.ttf") format("truetype");
+  font-weight: bold;
+  }
 @font-face {
   font-family: "Akira";
   src: local("Akira"),
    url("./fonts/Akira.otf") format("truetype");
   font-weight: bold;
   }
+  @font-face {
+    font-family: "Inter";
+    src: local("Inter"),
+     url("./fonts/Inter.ttf") format("truetype");
+    font-weight: bold;
+    }
+  
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
