@@ -2,3 +2,87 @@
 {
     color: #fff;
 }
+
+.Search {
+    color: #fff;
+}
+
+input:focus-visible {
+    outline: none !important;
+}
+
+.searchsocial {
+    justify-content: flex-end !important;
+}
+
+.predefined-search-terms {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px; /* Add some gap between terms */
+    
+}
+
+.predefined-term {
+    cursor: pointer;
+    padding-bottom: 100px;
+    color: #fff;
+  font-size: 40px;
+   
+}
+
+
+.Downey {
+    font-family: Downey;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;  /* Set the width to full available width */
+}
+
+.search-container .Search {
+    width: 100%;
+    box-sizing: border-box;  /* This ensures that padding and borders are included in the width calculation */
+}
+
+
+.clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 54%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #fff;
+    font-family: Downey;
+    font-size: 30px;
+}
+
+
+@media (max-width: 768px) {
+    
+
+    .hide-on-mobile  {
+        display: none !important;
+    }
+
+.predefined-search-terms .predefined-term {
+    font-size: 20px !important;
+    display: block;
+
+}
+
+.row-item.hide-on-mobile  {
+    display: none !important;
+}
+
+.row-item {
+    font-size: 20px !important;
+    padding: 20px 0 !important;
+}
+
+.Search {
+    border: 1px dashed #fff;
+    border-bottom: 1px dashed #fff !important
+}
+
+}

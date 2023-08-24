@@ -1,91 +1,122 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Added useRef
 import { getDocs, collection } from 'firebase/firestore';
-import { db } from '../../firebase'; // adjust this path to your firebase.js file
+import { db } from '../../firebase';
+import './search.css'
 
 export default function Search() {
-  const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false); // loading state
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [inputFocused, setInputFocused] = useState(false);
+    const blurTimeoutRef = useRef(null); // Reference to store the timeout
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // before fetching, set loading to true
-      const data = await getDocs(collection(db, 'testusers'));
-      const fetchedUsers = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      setUsers(fetchedUsers);
-      setLoading(false); // after fetching, set loading to false
-      console.log('Fetched users:', fetchedUsers);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const data = await getDocs(collection(db, 'testusers'));
+            const fetchedUsers = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            setUsers(fetchedUsers);
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
+
+    const filteredUsers = searchTerm.length > 1
+        ? users.filter(user => {
+            const skills = user.skills || [];
+            return user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+        })
+        : [];
+
+    const predefinedSearchTerms = ["WebGL", "AR", "Unity", "three.js"];
+
+    const handlePredefinedSearchClick = (term) => {
+        setSearchTerm(term);
     };
-    fetchData();
-  }, []);
 
-  const filteredUsers = searchTerm.length > 1
-    ? users.filter(user => {
-        const skills = user.skills || [];
-        return user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-      })
-    : [];
+    const handleInputBlur = () => {
+        blurTimeoutRef.current = setTimeout(() => {
+            setInputFocused(false);
+        }, 200); // 200ms delay
+    };
 
-  console.log('Search term:', searchTerm);
-  console.log('Filtered users:', filteredUsers);
+    const handleInputFocus = () => {
+        if (blurTimeoutRef.current) {
+            clearTimeout(blurTimeoutRef.current); // Clear the timeout if it's still pending
+        }
+        setInputFocused(true);
+    };
 
-
-
-  return (
-    <>
-      {loading ? (
-        <div className="pulse"></div> // Display the pulse animation while loading
-      ) : (
+    return (
         <>
-          <input
-            className='Search'
-            type="text"
-            placeholder="Search by skill e.g WebGL"
-            value={searchTerm}
-            onChange={event => setSearchTerm(event.target.value)}
-          />
-          {searchTerm.length > 1 && (
-            <div className="table-container">
-              <div className="table-row heading">
-                <div className="row-item">Name</div>
-                <div className="row-item">Company</div>
-                <div className="row-item">Skills</div>
-                <div className="row-item">Social</div>
-              </div>
-              {filteredUsers.map((user, index) => (
-                <div className="table-row" key={index}>
-                  <div className="row-item">{user.name}</div>
-                  <div className="row-item">{user.company}</div>
-
-                  <div className="row-item">
-                    <p style={{ padding: 5, backgroundColor: index % 2 === 0 ? '#000' : '#000', }}>
-                      {user.skills && user.skills.length > 0 ? user.skills.join(', ') : 'No skills'}
-                    </p>
-                  </div>
-                  <div className="row-item">
-                    {user.linkedin && (
-                      <a href={user.linkedin} target="_blank" rel="noreferrer">
-                        <img className='indexsocial' src="/images/in.png" alt="Linked-in" />
-                      </a>
+            {loading ? (
+                <div className="pulse"></div>
+            ) : (
+                <>
+                <div className="search-container">
+                    <input
+                        className='Search'
+                        type="text"
+                        placeholder="Search by skill e.g WebGL"
+                        value={searchTerm}
+                        onChange={event => setSearchTerm(event.target.value)}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                    />
+                    {searchTerm && (
+                        <span className="clear-icon" onClick={() => setSearchTerm('')}>X</span>
                     )}
-                    {user.twitter && (
-                      <a href={`https://twitter.com/${user.twitter}`}  target="_blank" rel="noreferrer">
-                        <img className='indexsocial' src="/images/tw.png" alt="Twitter" />
-                      </a>
-                    )}
-                    {user.instagram && (
-                      <a href={`https://www.instagram.com/${user.instagram}`} target="_blank" rel="noreferrer">
-                        <img className='indexsocial' src="/images/insta.png" alt="Instagram" />
-                      </a>
-                    )}
-                  </div>
                 </div>
-              ))}
-            </div>
-          )}
+                    {inputFocused && filteredUsers.length === 0 && (
+                      <><p>Popular searches</p><br />
+                      <div className="predefined-search-terms ">
+
+                  {predefinedSearchTerms.map((term, index) => (
+                    <span
+                      key={index}
+                      className="predefined-term Downey"
+                      onClick={() => handlePredefinedSearchClick(term)}
+                    >
+                      {term}
+                    </span>
+                  ))}
+                </div></>
+                    )}
+                    {searchTerm.length > 1 && (
+                        <div className="table-container">
+                            {filteredUsers.map((user, index) => (
+                                <div className="table-row" key={index}>
+                                    <div className="row-item">{user.name}</div>
+                                    <div className="row-item">{user.company}</div>
+                                    <div className="row-item hide-on-mobile" >
+                                        <p style={{ padding: 5, backgroundColor: index % 2 === 0 ? '#000' : '#000', }}>
+                                            {user.skills && user.skills.length > 0 ? user.skills.join(', ') : 'No skills'}
+                                        </p>
+                                    </div>
+                                    <div className="row-item searchsocial hide-on-mobile">
+                                        {user.linkedin && (
+                                            <a href={user.linkedin} target="_blank" rel="noreferrer">
+                                                <img className='indexsocial' src="/images/in.png" alt="Linked-in" />
+                                            </a>
+                                        )}
+                                        {user.twitter && (
+                                            <a href={`https://twitter.com/${user.twitter}`} target="_blank" rel="noreferrer">
+                                                <img className='indexsocial' src="/images/tw.png" alt="Twitter" />
+                                            </a>
+                                        )}
+                                        {user.instagram && (
+                                            <a href={`https://www.instagram.com/${user.instagram}`} target="_blank" rel="noreferrer">
+                                                <img className='indexsocial' src="/images/insta.png" alt="Instagram" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </>
+            )}
         </>
-      )}
-    </>
-  );
+    );
 }

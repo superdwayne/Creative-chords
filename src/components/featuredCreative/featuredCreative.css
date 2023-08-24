@@ -1,0 +1,12 @@
+.featuredcreative {
+    padding: 30px 0px 30px 0px;
+    margin: 0px !important;
+}
+
+@media (max-width: 768px) {
+
+.member-container
+ {
+    width: 70% !important;
+ }
+}

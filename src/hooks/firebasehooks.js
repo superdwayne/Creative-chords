@@ -7,6 +7,25 @@ export const useFirebase = () => {
   const [userData, setUserData] = useState({});
   const [userStatus, setUserStatus] = useState({ isUpdating: false, isProfileCreated: false, isApproved: false });
 
+
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [skills, setSkills] = useState([{ skill: '' }]);
+  const [instagram, setInstagram] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+  const [about, setAbout] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [step, setStep] = useState(1);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [featured, setFeatured] = useState(false);
+  const [photo, setPhoto] = useState(null);
+  const [isProfileCreated, setIsProfileCreated] = useState(false);
+  const [isApproved, setIsApproved] = useState(false); // New state variable for profile approval status
+
+  const [hasProfile, setHasProfile] = useState(false);  // create state for hasProfile
+  const [isEditing, setIsEditing] = useState(false); // Add this line
+
   useEffect(() => {
     const checkExistingUser = async () => {
       if (auth.currentUser) {
@@ -45,14 +64,40 @@ export const useFirebase = () => {
   };
 
   const deleteUser = async () => {
-    const userCollection = collection(db, 'testusers');
-    const q = query(userCollection, where('name', '==', userData.name));
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      const docRef = doc(userCollection, querySnapshot.docs[0].id);
-      await deleteDoc(docRef);
-      setUserData({});
+    const confirmInput = prompt("Type 'DELETE' to confirm deletion:");
+  
+    if (confirmInput === 'DELETE') {
+      try {
+        const userCollection = collection(db, 'testusers');
+        let q = query(userCollection, where('uid', '==', auth.currentUser.uid)); // CHANGE HERE
+        const querySnapshot = await getDocs(q);
+  
+        if (!querySnapshot.empty) {
+          const docRef = doc(userCollection, querySnapshot.docs[0].id);
+          await deleteDoc(docRef);
+  
+          // remove hasProfile from local storage
+          localStorage.removeItem('hasProfile');
+          setHasProfile(false); // Update the hasProfile state
+  
+          await auth.signOut();
+  
+          setName('');
+          setCompany('');
+          setSkills([{ skill: '' }]);
+          setInstagram('');
+          setTwitter('');
+          setLinkedin('');
+          setAbout('');
+  
+          setAlertMessage('<h1>User deleted successfully</h1>');
+        }
+      } catch (e) {
+        console.error('Error deleting document: ', e);
+        setAlertMessage('An error occurred while deleting the user');
+      }
+    } else {
+      setAlertMessage('Deletion canceled. Please type "DELETE" to confirm.');
     }
   };
 

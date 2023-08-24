@@ -2,6 +2,13 @@
   font-family: Akira;
 }
 
+/* .MuiGrid-root
+{    border: 1px solid #fff;} */
+
+.Inter {
+  font-family: Inter;
+}
+
 .pending h1 {
   width: 100% !important;
 }
@@ -10,6 +17,11 @@
   width: 40px !important
 }
 
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* creates a 3-column grid layout */
+  grid-gap: 20px; /* Adjust as needed for space between grid items */
+}
 
 .pending, .social {
   margin: 0px !important;
@@ -20,7 +32,19 @@
   margin: 0px auto !important;
   justify-content: space-around;
 }
+ul {
+  color:  #fff;
+}
 
+.profile {
+  margin: 0px auto;
+    justify-content: center;
+    border-radius: 30px;
+}
+
+a {
+  color: #fff;
+}
 
 body {
   background-color: #000; /* Black color code */
@@ -30,13 +54,6 @@ body {
   display: flex;
 }
 
-/* AddUser.css */
-.skills-grid {
-  display: inline-flex;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 3fr));
-  gap: 10px;
-  padding-bottom: 20px;
-}
 
 .mb20{
   margin-bottom: 20px
@@ -84,9 +101,16 @@ form {
 
 .Search {
   display: flex;
-  margin: 40px auto;
-  width: 80%;
-  padding: 30px;
+    margin: 60px 0px 50px 0px;
+    width: 100%;
+    padding: 30px 0px 30px 0px;
+    border-bottom: 1px solid #727272 !important;
+    border: 1px solid #000;
+    background: transparent;
+    font-size: 30px;
+    color: #fff;
+    font-family: Downey;
+    
 }
 
 nav h1 a {
@@ -99,7 +123,8 @@ nav h1 a {
 }
 
 .App-logo {
-  width: 100px !important;
+  width: 36px !important;
+  padding-left: 100px;
 }
 
 .indexsocial {
@@ -107,10 +132,8 @@ nav h1 a {
   padding: 5px;
 }
 
-
-
 .social,  img  {
-  width: 220px !important;
+  width: 100% !important;
     padding-top: 10px !important;
     align-items: center;
     cursor: pointer;
@@ -149,7 +172,8 @@ nav h1 a {
 
 .intro h3 {
   color: #fff; text-align: left;
-  line-height: 30px;
+  line-height: 33px;
+  font-size: 40px;
   
 }
 
@@ -164,7 +188,7 @@ small {
 
 .container {
   display: flex;
-  padding: 150px 150px 0px 150px;
+  padding: 250px 100px 100px 100px;
   background-color: #000;
 }
 .height100 {
@@ -219,7 +243,7 @@ ul {
 }
 
 .Creative {
-  height: 105vh;
+  height: 115vh;
 }
 
 .Creative_name_bk {
@@ -272,11 +296,10 @@ ul {
 header , .elements > section {
   display: flex;
   justify-content: flex-start;
-  width: 100%;
+  width: 93%;
   align-items: center;
-  position: fixed;
- 
-  
+  position: fixed;  
+  height: 100px;
 }
 
 .hr {
@@ -355,7 +378,7 @@ html,body #root{
 
 
 .main-container {
-  width: 100%;
+  padding: 0px 100px;
   margin: 0;
   justify-content: center;
   align-items: center;
@@ -366,11 +389,9 @@ html,body #root{
   display: flex;
   flex-flow: column nowrap;
   background-color: #000;
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
-padding: 5px;
-  border: 1px solid #fff;
-
+  padding: 5px;
 }
 
 .table-row {
@@ -416,117 +437,42 @@ padding: 5px;
 }
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 800px) {
 
-  .intro h3 {
-    font-size: 14px !important;
-  }
-  .about {
-    font-size: 20px;
-    display: none;
-  }
+  /* .MuiGrid-grid-xs-12 {
+    justify-content: center !important;;
+  } */
 
-  
-  .main-container {
-    height: 80vh !important;
-  }
-
-    header 
-    {
-      display: flex;
-    justify-content: space-between !important;
-    width: 100%;
-    align-items: center;
-    position: sticky !important;
-    background-color: #000;
-    }
-  
-  .App-logo {
-    position: relative !important;
-  }
-  
-  .container {
-    padding: 0px 60px 0px 30px !important;
-   word-break: keep-all;
-  }
-
-  .container h1 {
-    font-family: Akira;
-    font-size: 20px !important;
-    text-align: left;
-    position: absolute;
-    top: 35px;
-    left: 100px;
-  }
-
-  h1 {
-    font-size: 20px !important;
-    text-align: center;
-    padding: 0px !important
-  }
-  h2 {
-    font-size: 30px !important;
-    text-align: center;
-  }
-  h3 {
-    font-size: 35px !important;
-    text-align: center;
-  }
-
-  .Creative_name {
-    font-size: 25px !important;
-    text-align: center;
-    margin:  30px auto !important;
-    padding: 0px 100px  !important;
-  }
-  
-  .Creative_name_bk {
-    display: inline;
+  .css-1ihx4nv-MuiGrid-root 
+  {
     justify-content: center;
-    line-height: 20px !important;
-  }
-  .Creative_name_bk h3 {
-    margin: 0px !important;
   }
 
-  .Creative_profile p {
-    font-size: 12px;
-  }
-
-  .Creative img 
-{
-  
-  width: 60% !important;
-  padding-top: 35px !important;
-
-}
-
-.social a img {
-  width: 20% !important;
-}
-
-.Creative {
-  height: 70vh !important;
-}
-
-  .Creative_profile {
-    top: -200px !important;
+  nav {
+    height: 10vh;
+    justify-content: center !important;
+    align-items: center;
   }
 
   .featured h1 {
-    text-align: center  !important;
+
+    font-size: 30px;
+    text-align: center;
+    padding: 0px 30px 130px 0px;
+
   }
-  .featured {
-    padding:  0px !important;
+  .container 
+  {
+    padding: 100px 50px 0px 50px !important;
+  }
+  .main-container {
+    padding: 0px 25px;
   }
 
-  .intro {
-    height: 30vh !important;
+  .searchsocial {
+    justify-content: flex-start !important;
   }
-
-  .Creative_profile p {
-    width: 100% !important;
-  }
-
+  
+ 
 }
 
