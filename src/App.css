@@ -2,8 +2,56 @@
   font-family: Akira;
 }
 
-/* .MuiGrid-root
-{    border: 1px solid #fff;} */
+.height100percent{
+  height: 100% !important;
+}
+
+input{
+  background-color: #000;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.half {
+  width: 80% !important;
+}
+
+.skill {
+  display: flex;
+    
+    align-items: center;
+   
+    padding: 5px;
+    justify-content: center;
+}
+
+.skill-container {
+  display: flex;
+  position: relative;
+  margin: 10px;
+  
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+}
+
+.skill {
+  flex: 1;
+  margin-right: 10px;
+  color: #fff;
+}
+
+.remove-skill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+
+.MuiGrid-root
+{    border: 1px solid #fff;}
 
 .Inter {
   font-family: Inter;
@@ -87,8 +135,13 @@ h3 {
 label {
   color: #fff;
 }
+.width90{
+  width: 90%;
+}
 input {
   padding: 20px;
+  margin-bottom: 30px;
+ 
 }
 
 form {

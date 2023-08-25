@@ -70,7 +70,7 @@ const Nav = () => {
         </Grid>
       </Grid>
 
-      {/* <SignIn name={hasProfile ? "Login" : "Create a profile"} /> */}
+      <SignIn name={hasProfile ? "Login" : "Create a profile"} />
 
       {/* {isHomePage && (
     <section className="join">
