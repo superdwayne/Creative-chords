@@ -87,6 +87,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/sign" element={<Sign />} />
+            <Route path="/onboaring" element={<Onboarding />} />
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/terms-and-conditons" element={<Terms />} />
             <Route path="/*" element={<MainLayout />} />
@@ -102,60 +103,51 @@ function MainLayout() {
   const { user } = useContext(AuthContext);
   const { hasProfile } = useContext(ProfileContext);
 
-  return (
+  if (location.pathname === "/onboarding") {
+    return <Onboarding />
+  }
 
+  return (
     <>
     <section className="main">
-
-
-        {location.pathname !== "/about" && (
+        {location.pathname !== "/about"  && (
           <>
             <main className="container">
-
-            <Grid container spacing={2} alignItems="end" >
-      <Grid xs={12} md={7} display="flex">
-      <main className="intro"
-                
-              >
-                {user ? (
-                  <Onboarding />
-                ) : (
-                  <p>
-                    CREATIVE CHORDS
-                  </p>
-                )}
-
-                {user ? null : <><h3>
-                  An index of <br /> 
-Creative Technologists 
-
-                </h3></>}
-              </main>
-      </Grid>
-      <Grid xs={12} md={5} display="flex" alignItems="end">
-        <p>From interactive design to digital artistry, we cover the spectrum of tech-driven creativity - your ultimate guide to the world of Creative Technology!</p>
-      </Grid>
-    </Grid>
-
-              
+              <Grid container spacing={2} alignItems="end" >
+                <Grid xs={12} md={7} display="flex">
+                  <main className="intro">
+                    {user ? (
+                      <Onboarding />
+                    ) : (
+                      <>
+                        <p>CREATIVE CHORDS</p>
+                        <h3>
+                          An index of <br /> 
+                          Creative Technologists 
+                        </h3>
+                      </>
+                    )}
+                  </main>
+                </Grid>
+                <Grid xs={12} md={5} display="flex" alignItems="end">
+                  {user ? null : <p>From interactive design to digital artistry, we cover the spectrum of tech-driven creativity - your ultimate guide to the world of Creative Technology!</p>}
+                </Grid>
+              </Grid>
             </main>
 
             <div className="main-container">
               {user ? null : <SeachResults />}
-
-              <main className="featured">
-                {user ? null : <Featuredcreative />}
-              </main>
-
+              {user ? null : <Featuredcreative />}
             </div>
 
             <Footer logo={logo} />
           </>
         )}
-
-      </section></>
+      </section>
+    </>
   );
 }
+
 
 
 
